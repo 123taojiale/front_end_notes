@@ -8432,3 +8432,2882 @@ console.log(a.toFixed(2)); // 将原始类型当做对象来使
 
 </html>
 ```
+
+
+# 六、标准库
+
+```
+本章的主要任务就是学会使用别人编写好的 API
+```
+
+## 1. Object和Function
+
+**标准库（标准API）**
+
+```
+库：liberary
+API：应用程序编程接口，Application Programing Interface
+标准：ECMAScript标准
+```
+
+**Object**
+
+```
+1. 静态成员
+   keys(某个对象)，得到某个对象的所有属性名数组
+   values(某个对象)，得到某个对象的所有属性值数组
+   entries(某个对象)，得到某个对象的所有属性名和属性值的数组
+2. 实例成员
+   实例成员可以被重写
+
+   所有对象，都拥有Object的所有实例成员
+
+   toString方法：得到某个对象的字符串格式
+   默认情况下，该方法返回"[object Object]";
+
+   valueOf方法：得到某个对象的值
+   默认情况下，返回该对象本身
+
+   在JS中，当自动的进行类型转换时，如果要对一个对象进行转换，实际上是先调用对象的valueOf方法，然后调用返回结果的toString方法，将得到的结果进行进一步转换。
+```
+
+**Function**
+
+```
+所有函数都具有Function中的实例成员
+
+语法：arguments：在函数中使用，获取该函数调用时，传递的所有参数
+
+arguments是一个类数组（也称为伪数组：没有通过Array构造函数创建的类似于数组结构的对象），伪数组会缺少大量的数组实例方法
+
+arguments数组中的值，会与对应的形参映射
+
+实例成员
+   length属性，得到函数形参数量
+   apply方法：调用函数，同时指定函数中的this指向，参数以数组传递
+   call方法：调用函数，同时指定函数中的this指向，参数以列表传递
+   bind方法：得到一个新函数，该函数中的this始终指向指定的值。
+   通常，可以利用apply、call方法，将某个伪数组转换伪真数组。
+```
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月14日</title>
+</head>
+
+<body>
+
+
+    <!-- # 1. Object和Function
+
+    [toc]
+
+    ## 标准库（标准API）
+
+    - 库：liberary
+    - API：应用程序编程接口，Application Programing Interface
+    - 标准：ECMAScript标准
+
+
+    ## Object
+
+    ### 静态成员(成员 包括 属性 + 方法)
+
+    - keys(某个对象)，得到某个对象的所有属性名数组
+    - values(某个对象)，得到某个对象的所有属性值数组
+    - entries(某个对象)，得到某个对象的所有属性名和属性值的数组 -->
+
+
+
+    <!-- test1.html -->
+    <!-- 静态方法 通过构造函数来调用 -->
+    <script>
+        var obj = {
+            x: 123,
+            y: "Asdfaf",
+            z: true
+        };
+
+        var arr = Object.keys(obj);
+        console.log(arr); // (3) ["x", "y", "z"]
+    </script>
+
+    <script>
+        var obj = [234, 65, 2, 2, 3444, 111];
+
+        var arr = Object.values(obj);
+        console.log(arr); // (6) [234, 65, 2, 2, 3444, 111]
+    </script>
+
+    <script>
+        var obj = [234, 65, 2, 2, 3444, 111];
+
+        var arr = Object.entries(obj);
+        console.log(arr); // (6) [Array(2), Array(2), Array(2), Array(2), Array(2), Array(2)]
+    </script>
+
+
+
+
+
+
+    <!-- ### 实例成员
+
+    > 实例成员可以被重写
+
+    **所有对象，都拥有Object的所有实例成员**
+
+    - toString方法：得到某个对象的字符串格式
+
+    默认情况下，该方法返回"[object Object]"; -->
+
+
+
+    <!-- test2.html -->
+    <!-- 实例方法 通过构造函数所创建的实例对象来调用 -->
+    <!-- 通过实例对象来调用实例方法 -->
+    <script>
+        var obj = {
+            x: 1234,
+            y: 'abcd'
+        }
+
+        console.log(obj.toString()); // "[object Object]"
+    </script>
+
+    <!-- 实例对象重写实例方法 -->
+    <script>
+        var obj = {
+            x: 1234,
+            y: 'abcd'
+        }
+        obj.toString = function () {
+            return this.x + ',' + this.y;
+        }
+
+        console.log(obj.toString()); // "1234,abcd"
+    </script>
+
+    <!-- 所有对象，都拥有Object的所有实例成员 -->
+    <script>
+        var arr = [12, 3, 34, 2, 6, 245, 6];
+        // 数组本质上也是一个对象
+
+        console.log(arr.toString()); // "12,3,34,2,6,245,6"
+        // 发现数组里面的 toString 输出结果和 对象的不同 说明数组中的 toString 方法被重写了
+    </script>
+
+    <!-- 基本包装类中的 Number 里面的toString也被重写了 -->
+    <script>
+        var num = new Number(123);
+
+        console.log(num.toString()); // "123"
+    </script>
+
+
+    <!-- 模拟Number中的toString -->
+    <script>
+        function MyNumber(n) {
+            // ...
+            this.toSting = function () {
+                return "" + n;
+            };
+        }
+
+        var num = new MyNumber(234);
+        console.log(num.toSting()); // "234"
+    </script>
+
+    <!-- 函数也是对象 ==> 函数也拥有 toSting 方法 -->
+    <script>
+        function MyNumber(n) {
+            // ...
+            this.toSting = function () {
+                return "" + n;
+            };
+        }
+
+        console.log(MyNumber.toSting());
+        /*
+        function MyNumber(n) {
+            // ...
+            this.toSting = function () {
+                return "" + n;
+            };
+        }
+        */
+    </script>
+
+
+
+
+    <!-- - valueOf方法：得到某个对象的值
+
+    默认情况下，返回该对象本身
+
+    > 在JS中，当自动的进行类型转换时，如果要对一个对象进行转换，实际上是先调用对象的valueOf方法，然后调用返回结果的toString方法，将得到的结果进行进一步转换。 -->
+
+
+
+
+    <!-- test3.html -->
+    <script>
+        var obj = {
+            x: 13,
+            y: 34534,
+        }
+
+        console.log(obj.valueOf() === obj); // true
+    </script>
+
+    <!-- 模拟 Object 构造函数内部的 valueOf 方法 -->
+    <script>
+        var obj = {
+            x: 13,
+            y: 34534,
+        }
+
+        function Object() {
+            this.valueOf = function () {
+                return this;
+            }
+        }
+
+        console.log(obj.valueOf() === obj); // true
+    </script>
+
+
+    <!-- 在JS中，当自动的进行类型转换时，如果要对一个对象进行转换，
+        实际上是先调用对象的valueOf方法，
+        然后调用返回结果的toString方法，
+        将得到的结果进行进一步转换。 -->
+    <script>
+        var obj = {
+            x: 13,
+            y: 34534
+        }
+
+        console.log(obj + 1); // "[object Object]1"
+        // console.log(obj.valueOf().toString() + 1); // "[object Object]1"
+    </script>
+
+
+
+    <script>
+        var obj = {
+            x: 13,
+            y: 34534,
+            toString() {
+                return "hello";
+            }
+        }
+
+        console.log(obj + 1); // "hello1"
+        // 如果调用了valueOf已经得到了原始类型，则不再调用toString
+        console.log(obj.valueOf().toString() + 1); // "hello1"
+    </script>
+
+    <!-- 面试题 -->
+    <script>
+        var obj = {
+            x: 13,
+            y: 34534,
+            valueOf() {
+                return 123;
+            }
+        }
+
+        console.log(obj + 1); // 124
+        // 知识点: 如果调用了valueOf已经得到了原始类型，则不再调用toString
+        console.log(obj.valueOf().toString() + 1); // "1231"
+    </script>
+
+
+
+
+
+    <!-- ## Function
+
+    **所有函数都具有Function中的实例成员**
+
+    **语法：arguments：在函数中使用，获取该函数调用时，传递的所有参数**
+
+    **arguments是一个类数组（也称为伪数组：没有通过Array构造函数创建的类似于数组结构的对象），伪数组会缺少大量的数组实例方法**
+
+    **arguments数组中的值，会与对应的形参映射 [有传参 则有映射 否则没有映射]**
+
+    ### 实例成员
+
+    - length属性，得到函数形参数量
+    - apply方法：调用函数，同时指定函数中的this指向，参数以数组传递
+    - call方法：调用函数，同时指定函数中的this指向，参数以列表传递
+    - bind方法：得到一个新函数，该函数中的this始终指向指定的值。
+
+    通常，可以利用apply、call方法，将某个伪数组转换伪真数组。 -->
+
+
+
+
+    <!-- test4.html -->
+    <!-- 有传参 -->
+    <script>
+        var test = function abc(a, b) {
+            arguments[0] = "abc";
+            b = 123;
+
+            console.log(a, b); // "abc" 123
+            console.log(arguments); // Arguments(2) ["abc", 123, callee: ƒ, Symbol(Symbol.iterator): ƒ]
+        }
+
+        test(1, 2);
+    </script>
+
+    <!-- 不传参 -->
+    <script>
+        var test = function abc(a, b) {
+            arguments[0] = "abc";
+            b = 123;
+
+            console.log(a, b); // undefined 123
+            console.log(arguments); // Arguments [0: "abc", callee: ƒ, Symbol(Symbol.iterator): ƒ]
+        }
+
+        test();
+    </script>
+
+    <!-- 有传参 -->
+    <script>
+        var test = function abc(a, b) {
+            arguments[0] = "abc";
+            b = 123;
+
+            console.log(a, b); // "abc" 123
+            console.log(arguments); // Arguments(2) ["abc", 123, callee: ƒ, Symbol(Symbol.iterator): ƒ]
+        }
+
+        test(undefined, 2);
+    </script>
+
+    <!-- length属性，得到函数形参数量 -->
+    <script>
+        var test = function abc(a, b) {}
+        console.log(test.length); // 2
+    </script>
+
+
+    <!-- 改变this指向.html -->
+    <script>
+        function sayHello(a, b) {
+            console.log(this.name, this.age);
+        }
+
+        var user1 = {
+            name: "asfd",
+            age: 123
+        };
+        /* 要求打印user1中的name和age */
+
+        sayHello(); // 因为 this ==> window 所以不行
+        user1.sayHello(); // 因为 user1里面没有sayHello这个函数 所以不行
+    </script>
+
+
+
+
+    <!-- apply方法 ：调用函数，同时指定函数中的this指向，参数以数组传递 -->
+    <!-- call方法：调用函数，同时指定函数中的this指向，参数以列表传递 -->
+    <script>
+        function sayHello(a, b) {
+            console.log(this.name, this.age);
+        }
+
+        var user1 = {
+            name: "asfd",
+            age: 123
+        };
+
+        var user2 = {
+            name: "546345",
+            age: 11
+        };
+
+        sayHello.apply(user1); // "asfd" 123
+        sayHello.call(user2); // "546345" 11
+    </script>
+
+
+    <script>
+        function sayHello(a, b) {
+            console.log(this.name, this.age);
+            console.log(a, b);
+        }
+
+        var user1 = {
+            name: "asfd",
+            age: 123
+        };
+
+        var user2 = {
+            name: "546345",
+            age: 11
+        };
+
+        sayHello.apply(user1, [1, 2]);
+        sayHello.call(user2, 1, 2);
+    </script>
+
+
+    <!-- bind方法：得到一个新函数，该函数中的this始终指向指定的值。 -->
+    <script>
+        function sayHello(a, b) {
+            console.log(this.name, this.age);
+            console.log(a, b);
+        }
+
+        var user1 = {
+            name: "asfd",
+            age: 123
+        };
+
+        var user2 = {
+            name: "546345",
+            age: 11
+        };
+
+        var newFunc = sayHello.bind(user1, 1, 2);
+        newFunc();
+        // "asfd" 123
+        // 1 2
+        var newFunc2 = sayHello.bind(user1);
+        newFunc2(1, 2);
+        // "asfd" 123
+        // 1 2
+    </script>
+
+    <!-- test5.html -->
+    <!-- 通常，可以利用apply、call方法，将某个伪数组转换伪真数组。 -->
+    <script>
+        function test() {
+            console.log(arguments);
+            //将arguments转换为真数组
+            var newArr = [].slice.call(arguments)
+            console.log(newArr);
+        }
+
+        test(23, 5, 6, 2, 233, 5, 6, 7);
+    </script>
+
+</body>
+
+</html>
+```
+
+## 2. Array构造器
+
+凡是通过Array构造函数创建的对象，都是数组
+
+**静态成员**
+
+- from方法：可以将一个伪数组转换为真数组
+- isArray方法：判断一个给定的数据，是否为一个真数组
+- of方法：类似于中括号创建数组，依次赋予数组每一项的值
+
+**实例成员**
+
+- fill方法：用某个数据填充数组
+- pop
+- push
+- reverse：将当前数组颠倒顺序
+- shift
+- sort：对数组进行排序
+- splice
+- unshift
+
+纯函数、无副作用函数：不会导致当前对象发生改变
+
+- concat
+- includes: 数组中是否包含满足条件的元素
+- join
+- slice
+- indexOf
+- lastIndexOf
+- forEach: 遍历数组
+- every：是否所有元素都满足条件
+- some：是否至少有一个元素满足条件
+- filter：过滤，得到满足条件的元素组成的新数组
+- find: 查找第一个满足条件的元素，返回元素本身，如果没有找到，返回undefined
+- findIndex: 查找第一个满足条件的元素，返回元素的下标
+- map：映射，将数组的每一项映射称为另外一项
+- reduce：统计，累计
+
+
+[Array.prototype.reduce() mdn](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
+
+![20210226102951](https://cdn.jsdelivr.net/gh/123taojiale/dahuyou_picture@main/blogs/20210226102951.png)
+
+**作业**
+
+var arr = [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6];
+
+去掉数组中的负数，然后对每一项平方，然后再对每一项翻倍，然后求和 不许使用循环
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr. Tao</title>
+</head>
+
+<body>
+    <!--
+        var arr = [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6];
+
+    去掉数组中的负数，然后对每一项平方，然后再对每一项翻倍，然后求和 不许使用循环 -->
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6];
+        var result = arr.filter(function (item) {
+            return item >= 0;
+        }).map(function (item) {
+            return item * item;
+        }).map(function (item) {
+            return item * 2;
+        }).reduce(function (sum, item) {
+            return sum += item;
+        }, 0)
+        console.log(result);
+    </script>
+</body>
+
+</html>
+```
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月14日</title>
+</head>
+
+<body>
+    <!-- test1.html -->
+    <!-- from方法：可以将一个伪数组转换为真数组 -->
+    <!-- isArray方法：判断一个给定的数据，是否为一个真数组 -->
+    <script>
+        function test() {
+            console.log(arguments, Array.isArray(arguments));
+            // Arguments(6) [1, 4, 6, 57, 89, 33, callee: ƒ, Symbol(Symbol.iterator): ƒ] false
+            var newArr = Array.from(arguments);
+            console.log(newArr, Array.isArray(newArr)); // (6) [1, 4, 6, 57, 89, 33] true
+        }
+
+        test(1, 4, 6, 57, 89, 33)
+    </script>
+
+
+
+    <!-- fill方法：用某个数据填充数组 -->
+    <script>
+        var arr = new Array(10)
+        console.log(arr); // (10) [empty × 10]
+
+        arr.fill("abc");
+        console.log(arr); // (10) ["abc", "abc", "abc", "abc", "abc", "abc", "abc", "abc", "abc", "abc"]
+    </script>
+
+
+    <!-- reverse：将当前数组颠倒顺序 -->
+    <script>
+        var arr = [1, 2, 8, 34, 3, 3]
+        arr.reverse();
+        console.log(arr); //(6) [3, 3, 34, 8, 2, 1]
+    </script>
+
+
+    <!-- test2.html -->
+    <!-- sort：对数组进行排序 -->
+    <script>
+        var arr = [3, 1, 2, 4, 6, 5];
+        arr.sort();
+        console.log(arr); // (6) [1, 2, 3, 4, 5, 6]
+    </script>
+
+
+    <script>
+        var arr = [3, 211, 32, 11, 5, 4];
+        arr.sort();
+        console.log(arr); // (6) [11, 211, 3, 32, 4, 5]
+    </script>
+
+
+
+    <script>
+        var arr = [3, 211, 32, 11, 5, 4];
+        arr.sort(function (a, b) {
+            return a - b; // a - b ==> 升序
+            // return b - a; // b - a ==> 降序
+        });
+        console.log(arr); // (6) [3, 4, 5, 11, 32, 211]
+    </script>
+
+
+    <script>
+        var arr = [3, 211, 32, 11, 5, 4];
+        arr.sort(function (a, b) {
+            return b - a;
+        });
+        console.log(arr); // (6) [211, 32, 11, 5, 4, 3]
+    </script>
+
+
+    <script>
+        var arr = [3, 211, 32, 11, 5, 4];
+        //随机打乱顺序(洗牌)
+        arr.sort(function (a, b) {
+            return Math.random() - 0.5;
+        });
+        console.log(arr); // (6) [3, 4, 32, 211, 5, 11]
+    </script>
+
+
+
+
+    <!-- 纯函数、无副作用函数：不会导致当前对象发生改变 -->
+
+    <!-- test3.html -->
+    <script>
+        var arr1 = [1, 2, 3];
+        var arr2 = [4, 5, 6];
+        var arr3 = [7, 8, 9];
+
+        var newArr = arr1.concat(arr2, arr3);
+        console.log(newArr); // (9) [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        console.log(arr1); // (3) [1, 2, 3]
+        console.log(arr2); // (3) [4, 5, 6]
+        console.log(arr3); // (3) [7, 8, 9]
+    </script>
+
+
+
+
+
+
+    <!-- test4.html -->
+    <!-- includes: 数组中是否包含满足条件的元素 -->
+    <script>
+        var arr = [32, 6, 67, 5, 23, 4];
+        // 从数组下标3的位置开始寻找，目标是67
+        console.log(arr.includes(67)); // true 从下标为0的位置开始找67
+        console.log(arr.includes(67, 3)); // false 从下标为3的位置开始找67 // 从数字5开始
+    </script>
+
+
+
+    <script>
+        // 对象没法找
+        var arr = [{
+                x: 1,
+                y: 2
+            },
+            {
+                x: 3,
+                y: 4
+            }
+        ];
+
+        console.log(arr.includes({
+            x: 1,
+            y: 2
+        })); // false
+    </script>
+
+
+
+
+    <!-- 迭代方法 -->
+    <!-- 可以接收三个参数 function (item, index, array) {} -->
+
+    <!-- test5.html -->
+    <!-- forEach: 遍历数组 -->
+    <script>
+        var arr = [234, 65, 2, 423, 5];
+        arr.forEach(function (item) {
+            console.log(item);
+        });
+    </script>
+
+
+
+
+
+
+    <!-- test6.html -->
+    <!-- every：是否所有元素都满足条件 -->
+    <script>
+        var arr = [77, 65, 68, 55, 80];
+        // 判断是否所有同学都及格
+        var result = arr.every(function (item) {
+            return item >= 60;
+        });
+        console.log(result); // false
+    </script>
+
+
+    <!-- some：是否至少有一个元素满足条件 -->
+    <script>
+        var arr = [37, 25, 48, 55, 30];
+        //判断是否至少有一个同学及格
+        console.log(arr.some(function (item) {
+            return item >= 60;
+        })); // false
+    </script>
+
+    <!-- 小结
+    every ==> 判 所有
+    some ==> 判 存在
+     -->
+
+
+
+    <!-- test7.html -->
+    <!-- filter：过滤，得到满足条件的元素组成的新数组 -->
+    <script>
+        var arr = [77, 25, 88, 55, 30];
+        //得到所有及格的分数
+        var newArr = arr.filter(function (item) {
+            return item >= 60;
+        });
+
+        console.log(newArr); // (2) [77, 88]
+    </script>
+
+
+
+
+    <!-- test8.html -->
+    <!-- findIndex: 查找第一个满足条件的元素，返回元素的下标 // 没找到 ==> -1 -->
+    <script>
+        var arr = [{
+            name: "a",
+            age: 11,
+            score: 55
+        }, {
+            name: "b",
+            age: 12,
+            score: 65
+        }, {
+            name: "c",
+            age: 22,
+            score: 85
+        }];
+        // 得到及格的学生（找第一个的下标）
+        var index = arr.findIndex(function (item) {
+            return item.score >= 60
+        });
+        console.log(index); // 1
+    </script>
+
+
+
+    <!-- find: 查找第一个满足条件的元素，返回元素本身，如果没有找到，返回undefined -->
+    <script>
+        var arr = [{
+            name: "a",
+            age: 11,
+            score: 55
+        }, {
+            name: "b",
+            age: 12,
+            score: 65
+        }, {
+            name: "c",
+            age: 22,
+            score: 85
+        }];
+
+        //得到及格的学生（找第一个）
+        var result = arr.find(function (item) {
+            return item.score >= 60
+        });
+        console.log(result); // {name: "b", age: 12, score: 65}
+    </script>
+
+
+
+    <script>
+        var arr = [{
+            name: "a",
+            age: 11,
+            score: 55
+        }, {
+            name: "b",
+            age: 12,
+            score: 65
+        }, {
+            name: "c",
+            age: 22,
+            score: 85
+        }];
+
+        //得到及格的学生
+        var result = arr.filter(function (item) {
+            return item.score >= 60
+        });
+
+        console.log(result); // (2) [{0: {name: "b", age: 12, score: 65}}, {1: {name: "c", age: 22, score: 85}}]
+    </script>
+
+
+
+
+
+
+    <!-- test9.html -->
+    <!-- map：映射，将数组的每一项映射称为另外一项 -->
+
+    <script>
+        var arr = [55, 66, 22, 33, 44, 88];
+
+        //得到一个新数组，新数组的每一项是一个对象
+        //对象中包含两个属性：name、score
+
+        var newArr = arr.map(function (item, i) {
+            return {
+                name: "学生" + (i + 1),
+                score: item
+            }
+        });
+        console.log(newArr); // (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+    </script>
+
+
+    <script>
+        var arr = [55, 66, 22, 33, 44, 88];
+        var newArr = arr.map(function (item, i) {
+            return {
+                name: "学生" + (i + 1),
+                score: item
+            }
+        });
+        //得到一个学生的姓名数组
+        newArr = newArr.map(function (item) {
+            return item.name;
+        });
+
+        console.log(newArr); // (6) ["学生1", "学生2", "学生3", "学生4", "学生5", "学生6"]
+    </script>
+
+
+
+    <script>
+        var arr = [55, 66, 22, 33, 44, 88];
+        var newArr = arr.map(function (item, i) {
+            return {
+                name: "学生" + (i + 1),
+                score: item
+            }
+        }).map(function (item) {
+            return item.name;
+        });
+
+        console.log(newArr); // (6) ["学生1", "学生2", "学生3", "学生4", "学生5", "学生6"]
+    </script>
+
+
+
+    <!-- test10.html -->
+    <!-- reduce：统计，累计 -->
+    <script>
+        var arr = [1, 2, 5, 3];
+
+        var sum = arr.reduce(function (s, item) {
+            console.log("回调", s, item);
+            return s + item;
+        }, 0); // 第二个参数 0 作为一个初始值传给 s
+        // 第二个参数可以防止数组为空 ==> error
+        // 如果写了第二个参数 那么当数组为空时 直接将第二个参数作为结果返回
+        console.log(sum); // 11
+
+        /*
+         回调 0 1
+         回调 1 2
+         回调 3 5
+         回调 8 3 // 表达式的值 ==> 最后一次 return 的结果
+         11
+        */
+    </script>
+
+
+
+
+
+
+    <!-- test11.html -->
+    <!-- 链式编程：每一个函数调用返回的类型一致 -->
+    <script>
+        var arr = [22, 33, 44, 55, 66, 77, 88];
+
+        // 先对数组进行随机排序
+        // 只取及格的分数
+        // 得到学生对象的数组（每个学生对象包含姓名和分数）
+
+        var result = arr.sort(function () {
+            return Math.random() - 0.5;
+        }).filter(function (item) {
+            return item >= 60;
+        }).map(function (item, i) {
+            return {
+                name: `学生${i+1}`,
+                score: item
+            }
+        });
+        console.log(result); // (3) [{…}, {…}, {…}]
+        /*
+        0: {name: "学生1", score: 77}
+        1: {name: "学生2", score: 66}
+        2: {name: "学生3", score: 88}
+        length: 3
+        */
+    </script>
+
+
+</body>
+
+</html>
+
+```
+
+## 3. [作业讲解]Array构造器
+
+**作业**
+
+var arr = [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6];
+
+去掉数组中的负数，然后对每一项平方，然后再对每一项翻倍，然后求和 不许使用循环
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr. Tao</title>
+</head>
+
+<body>
+    <!--
+        var arr = [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6];
+
+    去掉数组中的负数，然后对每一项平方，然后再对每一项翻倍，然后求和 不许使用循环 -->
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6];
+        var result = arr.filter(function (item) {
+            return item >= 0;
+        }).map(function (item) {
+            return item * item;
+        }).map(function (item) {
+            return item * 2;
+        }).reduce(function (sum, item) {
+            return sum += item;
+        }, 0)
+        console.log(result); // 182
+    </script>
+</body>
+
+</html>
+```
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mr. Yuan</title>
+</head>
+
+<body>
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6];
+        // 去掉数组中的负数， 然后对每一项平方， 然后再对每一项翻倍， 然后求和
+        // 不许使用循环
+
+        var result = arr.filter(function(item) {
+            return item >= 0;
+        }).map(function(item) {
+            return item ** 2;
+        }).map(function(item) {
+            return item * 2;
+        }).reduce(function(s, item) {
+            return s + item;
+        }, 0);
+
+        console.log(result); // 182
+    </script>
+</body>
+
+</html>
+```
+
+## 4. 原始类型包装器
+
+```
+- new 包装器(值)：返回的是一个对象
+- 包装器(值)：返回的是一个原始类型
+```
+
+**Number**
+
+```
+1. 静态成员
+   isNaN
+   isFinite
+   isInteger：判断一个数据是否是整数
+   parseFloat: 将一个数据转换为小数
+   parseInt：将以一个数据转换为整数，直接舍去小数部分
+   parseInt、parseFloat要求参数是一个字符串，如果不是字符串，则会先转换为字符串。
+   从字符串开始位置进行查找，找到第一个有效的数字进行转换，如果没有找到，则返回NaN，左右空白字符会忽略
+
+   parseInt，可以传入第二个参数，表示将给定的字符串，识别为多少进制。
+
+2. 实例成员
+   toFixed方法：会有四舍五入
+   toPrecision：以指定的精度返回一个数字字符串
+```
+
+**Boolean**
+
+```
+...
+```
+
+**String**
+
+```
+1. 静态成员
+   fromCharCode：通过unicode编码创建字符串
+2. 实例成员
+   length：字符串长度
+   字符串是一个伪数组
+
+   charAt：得到指定位置的字符
+   var s = "abc";
+   s.cahrAt(0); // "a"
+   s[0]; // "a"
+   // 区别
+   s.charAt(10); // ""
+   s[10]; // undefined
+   charCodeAt
+   concat
+   includes
+   endsWith
+   startsWith
+   indexOf
+   lastIndexOf
+   padStart
+   padEnd
+   repeat
+   slice：从某个位置取到某个位置；位置可以是负数；
+   substr: 从某个位置开始取，取指定的长度；位置可以是负数；
+   substring：从某个位置取到某个位置；不可以是负数；参数位置是可调换的。
+   toLowerCase
+   toUpperCase
+   split：分割字符串
+```
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月17日</title>
+</head>
+
+<body>
+
+    <!-- test.html -->
+    <script>
+        var a = 111.123;
+        var num = a.toFixed(2);
+        // new Number(a).toFixed(2);
+        console.log(num); // 111.12
+    </script>
+
+
+    <!-- window 里面也有 isNaN -->
+    <script>
+        console.log(Number.isNaN); // ƒ isNaN() { [native code] }
+        console.log(isNaN); // ƒ isNaN() { [native code] }
+        console.log(Number.isNaN === isNaN); // false
+        console.log(isNaN === window.isNaN); // true
+    </script>
+
+
+
+
+
+
+    <!-- 随机数.html -->
+    <script>
+        var MyFunctions = {
+            getRandom: function (min, max) {
+                return Math.floor(Math.random() * (max - min + 1) + min);
+            }
+        }
+        console.log(MyFunctions.getRandom(5, 8));
+    </script>
+
+    <!-- 以下是常见的问题写法 -->
+    <script>
+        var MyFunctions = {
+            getRandom: function (min, max) {
+                return parseInt(Math.random() * (max - min) + min); // 取不到最大值 [若是负数 会有bug]
+                // return parseInt(Math.random() * (max + 1 - min) + min); // 可取最大值
+            }
+        }
+        console.log(MyFunctions.getRandom(5, 8)); // 5 或 6 或 7
+    </script>
+
+
+    <script>
+        var MyFunctions = {
+            // Math.floor() 向左取整
+            getRandom: function (min, max) {
+                return Math.floor(Math.random() * (max - min) + min); // 取不到最大值 [负数 也一样]
+                // return parseInt(Math.random() * (max + 1 - min) + min); // 可取最大值
+            }
+        }
+        console.log(MyFunctions.getRandom(5, 8)); // 5 或 6 或 7
+    </script>
+
+
+    <!-- test2.html -->
+    <script>
+        console.log(`abc
+def`);
+        /*
+abc
+def
+        */
+
+        console.log(`abc\
+def`); // abcdef
+
+        console.log("abcdef"); // abcdef
+        console.log("abc\
+def"); // abcdef
+
+        // 下面这种写法是错误的
+        /*
+        console.log("abc
+def");
+        */
+    </script>
+
+    <script>
+        // String.fromCharCode() 将字符编码转换成字符
+        var str = "";
+        for (var i = 65; i < 65 + 26; i++) {
+            str += String.fromCharCode(i);
+        }
+        console.log(str); // "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    </script>
+
+
+
+
+    <!-- 随机字符串 ==> 指定长度的 由字母(包括大小写)和数字组成的  -->
+    <script>
+        var MyFunctions = {
+            getRandom: function (min, max) {
+                return Math.floor(Math.random() * (max - min + 1) + min);
+            },
+            getRanString: function (len) {
+                var temp = "",
+                    str = "";
+                for (var i = 65; i < 65 + 26; i++) {
+                    temp += String.fromCharCode(i);
+                }
+                for (var i = 97; i < 97 + 26; i++) {
+                    temp += String.fromCharCode(i);
+                }
+                for (var i = 48; i < 48 + 10; i++) {
+                    temp += String.fromCharCode(i);
+                }
+                for (var i = 0; i < len; i++) {
+                    str += temp[this.getRandom(0, 26 + 26 + 10 - 1)];
+                }
+                return str;
+            }
+        }
+        for (var i = 0; i < 10; i++) {
+            console.log(MyFunctions.getRanString(5));
+        }
+    </script>
+
+
+    <!-- 字符串其实就是一个伪数组 -->
+    <script>
+        var str = "a撒旦发";
+        // 控制台输入 new String("a撒旦发"); // 查看返回值
+        for (var i = 0; i < str.length; i++) {
+            console.log(str[i]);
+        }
+    </script>
+
+    <script>
+        var str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        for (var i = 0; i < str.length; i++) {
+            console.log(str[i]); // 依次输出 A 到 Z
+        }
+    </script>
+
+    <script>
+        var hour = 12,
+            minute = 8,
+            second = 20;
+
+        console.log(`${hour.toString().padStart(2, "0")}:\
+${minute.toString().padStart(2, "0")}:\
+${second.toString().padStart(2, "0")}`); // 02:08:20
+    </script>
+
+
+    <!-- 实例方法 ==> padStart示例 -->
+    <script>
+        'abc'.padStart(10); // "       abc"
+        'abc'.padStart(10, "foo"); // "foofoofabc"
+        'abc'.padStart(6, "123465"); // "123abc"
+        'abc'.padStart(8, "0"); // "00000abc"
+        'abc'.padStart(1); // "abc"
+    </script>
+
+</body>
+
+</html>
+```
+
+## 5. [作业讲解]原始类型包装器
+
+以下练习可以使用之前书写的通用函数
+
+1. 找到某个字符串中出现最多的字符，打印字符和它出现的次数
+
+```html
+    <script>
+        var s = "absadfgsDfafgsdfgsdfgsadfasdasvasdfsadfasdfa"; // 字符串本质上是一个数组
+        // 将s变成数组
+        var arr = Array.from(s); // Array.from() ==> 伪数组 转 真正数组
+        var obj = MyFunctions.getTopFreqInArray(arr);
+        console.log(obj);
+    </script>
+```
+
+2. 将一个字符串中单词之间的空格去掉，然后把每个单词首字母转换成大写
+
+比如："hello world"  ->  "HelloWorld"  大驼峰命名法
+
+```html
+    <script>
+        var s = "hello      woRld        js";
+
+        function bigCamel(s) {
+            var result = "";
+            var empties = " \t\r\n"; //记录所有的空白字符
+            for (var i = 0; i < s.length; i++) {
+                if (!empties.includes(s[i])) {
+                    //判断s[i]是否是首字母 ==> s[i-1]是否是空白字符
+                    if (empties.includes(s[i - 1]) || i === 0) {
+                        result += s[i].toUpperCase();
+                    } else {
+                        result += s[i];
+                    }
+                }
+            }
+            return result;
+        }
+        console.log(bigCamel(s));
+    </script>
+```
+
+```html
+    <script>
+        // 目前只要求考虑空格
+        var s = "hello      woRld        js";
+
+        function bigCamel(s) {
+            return s.split(" ").filter(function (item) {
+                return item.length > 0;
+            }).map(function (item) {
+                return item[0].toUpperCase() + item.substring(1).toLowerCase();
+            }).join("");
+        }
+
+        console.log(bigCamel(s));
+    </script>
+```
+
+3. 书写一个函数，产生一个指定长度的随机字符串，字符串中只能包含大写字母、小写字母、数字
+
+```html
+    <script>
+        function getRandomString(len) {
+            var template = "";
+            for (var i = 65; i < 65 + 26; i++) {
+                template += String.fromCharCode(i);
+            }
+            for (var i = 97; i < 97 + 26; i++) {
+                template += String.fromCharCode(i);
+            }
+            for (var i = 48; i < 48 + 10; i++) {
+                template += String.fromCharCode(i);
+            }
+
+            var result = "";
+            for (var i = 0; i < len; i++) {
+                //从模板中随机取出一位字符
+                var index = MyFunctions.getRandom(0, template.length);
+                result += template[index];
+            }
+            return result;
+        }
+
+        console.log(getRandomString(20));
+    </script>
+```
+
+4. 将字符串按照字符编码的顺序重新升序排序
+
+```html
+    <script>
+        var s = "bffdgwfafagfdgsfafa";
+        var result = Array.from(s).sort().join("");
+        console.log(result);
+    </script>
+```
+
+> 如果是降序
+
+```html
+    <script>
+        var s = "bffdgwfafagfdgsfafa";
+        var result = Array.from(s).sort().reverse().join("");
+        console.log(result);
+    </script>
+```
+
+5. 从一个标准的身份证号中取出用户的出生年月日和性别，保存到对象中
+
+> 例如，"524713199703020014"
+>
+> 得到对象：
+>
+> birthYear: 1997
+>
+> birthMonth: 3
+>
+> birthDay: 2
+>
+> gender: "男"  // 性别看倒数第二位，奇数为男，偶数为女
+
+```html
+    <script>
+        function getInfoFromPID(pid) {
+            return {
+                birthYear: parseInt(pid.substr(6, 4)),
+                birthMonth: parseInt(pid.substr(10, 2)),
+                birthDay: parseInt(pid.substr(12, 2)),
+                gender: pid[pid.length - 2] % 2 === 0 ? "女" : "男"
+            }
+        }
+
+        console.log(getInfoFromPID("524713199703020014"));
+    </script>
+```
+
+## 6. Math对象
+
+```
+提供了一系列与数学相关的成员
+
+常量：永远不会变化的数据。常量一般命名时所有字母大写，如果有多个单词，用下划线分割。
+
+random方法: 产生一个0~1之间的随机数
+PI属性：得到圆周率
+abs方法：求绝对值
+floor方法：对一个数向下取整
+ceil方法：对一个数向上取整
+max方法：得到一组数字的最大值；如果无参，得到-Infinity
+min方法：得到一组数字的最小值；如果无参，得到Infinity
+pow方法：求一个数字的幂次方
+round方法：得到一个四舍五入的整数
+```
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月15日</title>
+</head>
+
+<body>
+
+    <!-- Math 是对象  不是构造函数 -->
+    <script>
+        // Math对象
+        console.log(typeof Math); // "object"
+    </script>
+
+    <!-- PI属性：得到圆周率 -->
+    <script>
+        console.log(Math.PI); // 3.141592653589793
+        // 常量：永远不会变化的数据。常量一般命名时所有字母大写，如果有多个单词，用下划线分割。
+    </script>
+
+    <!-- Math 对象上的常用方法 -->
+    <script>
+        // random方法: 产生一个0~1 之间的随机数
+
+
+        // abs方法： 求绝对值
+        console.log(Math.abs(-1)); // 1
+
+
+        // floor方法： 对一个数向下取整
+        Math.floor(1.2); // 1
+        parseInt(1.2); // 1
+        /* Math.floor() 和 parseInt() 正数两者等效 但负数则不同 */
+        Math.floor(-1.2); // -2
+        parseInt(-1.2); // -1
+
+
+        // ceil方法： 对一个数向上取整
+
+
+        // max方法： 得到一组数字的最大值； 如果无参， 得到 - Infinity
+        console.log(Math.max()); // -Infinity
+        console.log(Math.max(1, 2, 32, 11, 52, 63)); // 63
+
+        // min方法： 得到一组数字的最小值； 如果无参， 得到 Infinity
+        console.log(Math.min()); // Infinity
+        console.log(Math.min(1, 2, 32, 11, 52, 63)); // 1
+
+        // pow方法： 求一个数字的幂次方
+        console.log(Math.pow(2, 3)); // 8
+        console.log(2 ** 3); // 8
+
+        // round方法： 得到一个四舍五入的整数
+        Math.round(0.5); // 1
+        Math.round(1.2); // 1
+        Math.round(-1.5); // -1
+        Math.round(-1.4); // -1
+    </script>
+
+
+</body>
+
+</html>
+```
+
+## 7. Date构造器
+
+**术语**
+
+```
+1. 时间单位
+   年（year）
+   月（month）
+   日（date）
+   小时（hour）
+   分钟（minute）
+   秒（second） = 1000ms
+   毫秒（millisecond，ms） = 1000 us
+   微秒（microsecond，us） = 1000 ns
+   纳秒（nanosecond，ns）
+
+2. UTC和GMT
+   世界划分为24个时区，北京在东8区，格林威治在0时区。
+   GMT：Greenwish Mean Time 格林威治世界时。太阳时，精确到毫秒。
+   UTC：Universal Time Coodinated 世界协调时。以原子时间为计时标准，精确到纳秒。
+   UTC和GMT之间误差不超过0.9秒
+   GMT+0800 东8区
+
+3. 时间戳
+   数字
+   1970-1-1 凌晨 到 某个时刻 所经过的毫秒数
+```
+
+**创建时间对象**
+
+```
+直接调用函数（不适用new），忽略所有参数，直接返回当前时间的字符串。
+new Date(): 创建日期对象
+无参，当前时间
+1个参数，参数为数字，表示传入的是时间戳
+两个参数以上，分别表示：年、月、日、时、分、秒、毫秒
+注意：月份的数字从0开始计算。
+
+如果缺失参数，日期部分默认为1，时分秒毫秒默认为0。
+
+月、日、时、分、秒、毫秒，均可以传递负数，如果传递负数，会根据指定日期进行计算。
+```
+
+**实例成员**
+
+```
+getDate方法：得到日期部分
+
+getDay方法：得到星期几，0表示星期天
+
+getFullYear方法：得到年份
+
+getHours方法：得到小时部分
+
+getMinutes方法：得到分钟部分
+
+getSeconds方法：得到秒部分
+
+getMilliseconds方法：得到毫秒部分
+
+getTime方法：得到时间戳
+
+getMonth方法：得到月，从0开始计算
+
+setDate方法：设置日期
+
+setMonth方法：设置月份
+
+setFullYear方法：设置年
+
+setMinutes方法
+
+setSeconds方法
+
+setMilliseconds方法
+
+setTime方法：重新设置时间戳
+
+toDateString方法：将日期部分转换为可读的字符串。
+
+toISOString方法：将整个对象转换为ISO标准的字符串格式。
+
+toLocaleDateString方法：根据当前系统的地区设置，将日期部分转换为可读的字符串
+
+toLocaleString方法：根据当前系统的地区设置，将整个日期对象转换为可读的字符串
+
+toLocaleTimeString方法：根据当前系统的地区设置，将时间部分转换为可读的字符串
+```
+
+**日期的运算**
+
+```
+日期对象重写了Object中的valueOf方法，返回的是一个数字，表示时间戳
+
+因此，日期对象可以进行数学运算
+```
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月15日</title>
+</head>
+
+<body>
+    <!-- 创建时间对象 -->
+    <!-- test.html -->
+    <script>
+        // 直接调用函数（不适用new），忽略所有参数，直接返回当前时间的 字符串(注意 是字符串 而非实例对象) 。
+        var now = Date();
+        console.log(now); // Tue Sep 15 2020 19:30:51 GMT+0800 (中国标准时间)
+    </script>
+
+    <script>
+        // new Date(): 创建日期对象
+        // 1. 无参， 当前时间
+        var d = new Date();
+        console.log(d); // Tue Sep 15 2020 19:34:11 GMT+0800 (中国标准时间)
+
+        // 2. 1个参数， 参数为数字， 表示传入的是时间戳
+        var d = new Date(1000);
+        console.log(d); // Thu Jan 01 1970 08:00:01 GMT+0800 (中国标准时间)
+
+        var d = new Date(-1000);
+        console.log(d); // Thu Jan 01 1970 07:59:59 GMT+0800 (中国标准时间)
+        /* 因为将格林威治时间转换成了北京时间 所以在初始时间的基础上 加了8小时 */
+
+        // 3. 两个参数及以上， 分别表示： 年、 月、 日、 时、 分、 秒、 毫秒
+        var d = new Date(2015, 5, 1, 13, 14, 15, 200); // 这里传入的时间是北京时间
+        console.log(d); // Mon Jun 01 2015 13:14:15 GMT+0800 (中国标准时间)
+
+        /* 注意：月份的数字从0开始计算。
+        如果缺失参数，日期部分默认为1，时分秒毫秒默认为0。 */
+
+        var d = new Date(2015, 5);
+        console.log(d); // Mon Jun 01 2015 00:00:00 GMT+0800 (中国标准时间)
+
+        // 月、日、时、分、秒、毫秒，均可以传递负数，如果传递负数，会根据指定日期进行计算。
+        var d = new Date(2015, 0, 1);
+        console.log(d); // Thu Jan 01 2015 00:00:00 GMT+0800 (中国标准时间)
+
+        /* 日期是从1开始的 */
+        var d = new Date(2015, 0, 0); // 提前1天
+        console.log(d); // Wed Dec 31 2014 00:00:00 GMT+0800 (中国标准时间)
+
+
+        var d = new Date(2015, 0, -1); // 提前2天
+        console.log(d); // Tue Dec 30 2014 00:00:00 GMT+0800 (中国标准时间)
+    </script>
+
+
+    <!-- 实例成员 -->
+    <!-- get -->
+    <script>
+        var d = new Date();
+        // getDate方法： 得到日期部分(1-31)
+        console.log(d.getDate()); // 15
+        // getDay方法： 得到星期几(0-6)， 0 表示星期天
+        console.log(d.getDay()); // 2 ==> 周三
+        // getFullYear方法： 得到年份
+        console.log(d.getFullYear()); // 2020
+        // getHours方法： 得到小时部分
+        console.log(d.getHours()); // 19 ==> 晚上7点
+        // getMinutes方法： 得到分钟部分
+        console.log(d.getMinutes()); // 48 ==> 48分
+        // getSeconds方法： 得到秒部分
+        console.log(d.getSeconds()); // 10 ==> 10秒
+        // getMilliseconds方法： 得到毫秒部分
+        console.log(d.getMilliseconds()); // 588 ==> 588毫秒
+        // getTime方法： 得到时间戳
+        console.log(d.getTime()); // 1600170490588
+        // getMonth方法： 得到月， 从0开始计算
+        console.log(d.getMonth()); // 8 ==> 9月
+    </script>
+
+    <!-- set -->
+    <script>
+        var d = new Date();
+        console.log(d); // Tue Sep 15 2020 19:51:31 GMT+0800 (中国标准时间)
+        // setDate方法： 设置日期
+        console.log(d.setDate(14)); // 1600084394946
+        console.log(d); // Mon Sep 14 2020 19:53:14 GMT+0800 (中国标准时间)
+        // setMonth方法： 设置月份
+        // setFullYear方法： 设置年(也可以同时设置年月日)
+        // setMinutes方法
+        // setSeconds方法
+        // setMilliseconds方法
+        // setTime方法： 重新设置时间戳
+    </script>
+
+    <!-- 转换为字符串 -->
+    <script>
+        var d = new Date();
+        // toDateString方法： 将日期部分转换为可读的字符串。
+        console.log(d.toDateString()); // Tue Sep 15 2020
+        // toISOString方法： 将整个对象转换为ISO标准的字符串格式。
+        console.log(d.toISOString()); // 2020-09-15T11:57:53.979Z
+        // toLocaleDateString方法： 根据当前系统的地区设置， 将日期部分转换为可读的字符串
+        console.log(d.toLocaleDateString()); // 2020/9/15
+        // toLocaleString方法： 根据当前系统的地区设置， 将整个日期对象转换为可读的字符串
+        console.log(d.toLocaleString()); // 2020/9/15 下午7:57:53
+        // toLocaleTimeString方法： 根据当前系统的地区设置， 将时间部分转换为可读的字符串
+        console.log(d.toLocaleTimeString()); // 下午7:57:53
+    </script>
+
+
+    <!-- 友好的日期字符串.html -->
+    <script>
+        // 年-月-日 时:分:秒
+        function getDateString(date) {
+            var year = date.getFullYear().toString().padStart(4, "0");
+            var month = (date.getMonth() + 1).toString().padStart(2, "0");
+            var day = date.getDate().toString().padStart(2, "0");
+
+            var hour = date.getHours().toString().padStart(2, "0");
+            var minute = date.getMinutes().toString().padStart(2, "0");
+            var second = date.getSeconds().toString().padStart(2, "0");
+
+            return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+        }
+
+        console.log(getDateString(new Date())); // 2020-09-15 20:00:08
+    </script>
+
+    <!-- 日期的运算 -->
+
+    <!-- 日期对象重写了Object中的valueOf方法，返回的是一个数字，表示时间戳 ==> 日期对象可以进行数学运算 -->
+    <script>
+        var d = new Date();
+        console.log(d); // Tue Sep 15 2020 20:11:38 GMT+0800 (中国标准时间)
+        d.setTime(d.valueOf() + 24 * 60 * 60 * 1000);
+        console.log(d); // Wed Sep 16 2020 20:11:38 GMT+0800 (中国标准时间)
+    </script>
+
+    <script>
+        var d = new Date();
+        console.log(d); // Tue Sep 15 2020 20:11:38 GMT+0800 (中国标准时间)
+
+        d.setTime(d.getDate() + 1); // d.getDate() + 1 ==> 16
+        console.log(d); // Thu Jan 01 1970 08:00:00 GMT+0800 (中国标准时间)
+    </script>
+
+
+</body>
+
+</html>
+```
+
+**作业**
+```
+1. 编写一个函数，用于返回一个友好的日期字符串格式
+
+   年-月-日 时:分:秒
+
+2. 给定用户的生日（年、月、日），计算该用户的年龄
+
+3. 根据系统当前的月份，输出这一个月每一天的星期
+
+   2019年6月1日：星期六
+   2019年6月2日：星期日
+   .....
+   2019年6月30日：星期日
+```
+
+## 8. [作业讲解]Date构造器
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月17日</title>
+</head>
+
+<body>
+
+    <script src="./Myfunctions.js"></script>
+
+    <!-- 1. 编写一个函数，用于返回一个友好的日期字符串格式
+
+    年-月-日 时:分:秒 -->
+    <script>
+        function getDateString(date) {
+            var year = date.getFullYear().toString().padStart(4, "0");
+            var month = (date.getMonth() + 1).toString().padStart(2, "0");
+            var day = date.getDate().toString().padStart(2, "0");
+
+            var hour = date.getHours().toString().padStart(2, "0");
+            var minute = date.getMinutes().toString().padStart(2, "0");
+            var second = date.getSeconds().toString().padStart(2, "0");
+
+            return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+        }
+
+        var now = new Date();
+        console.log(getDateString(now)); // 2020-09-16 12:35:31
+    </script>
+
+
+
+
+    <!-- 2. 给定用户的生日（年、月、日），计算该用户的年龄 -->
+    <script>
+        var MyFunctions = {
+            isLeap: function (year) {
+                return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+            },
+            getAge: function (year, month, day) {
+                //得到当前日期
+                var now = new Date();
+                var nowAge = now.getFullYear() - year; // 默认生日已过
+                // 处理闰年 ==> 若生日是在闰年的2月29号 那么默认在平年时 生日是 2月28号
+                if (month === 2 && day === 29 && !this.isLeap(now.getFullYear())) {
+                    // 条件1: month === 2 && day === 29 在闰年的2月29号出生
+                    // 条件2: !this.isLeap(now.getFullYear()) 今年是平年
+                    // [平年也得过生日 若是在平年 那么把生日给改成 2月28号]
+                    day = 28;
+                }
+                // 得到今年的生日
+                var birthdayThisYear = new Date(now.getFullYear(), month - 1, day);
+                // 目前还没到生日那天
+                if (now < birthdayThisYear) {
+                    nowAge--;
+                }
+                return nowAge;
+            }
+        }
+
+        console.log(MyFunctions.getAge(2000, 2, 29));
+    </script>
+
+
+
+    <!-- 2.1 计算还有多少天过生日 -->
+    <script>
+        function getDaysToBirthday(month, day) {
+            // var thisYear = new Date().getFullYear();
+            var now = new Date();
+            var thisYear = now.getFullYear();
+
+            // 今年的生日
+            var birthdayThisYear = new Date(thisYear, month - 1, day);
+            // 生日已过
+            if (birthdayThisYear < now) {
+                // 生日过了  那么下一个生日就是下一年
+                birthdayThisYear.setFullYear(now.getFullYear() + 1);
+            }
+            var timeDec = birthdayThisYear - now;
+            var days = timeDec / (24 * 60 * 60 * 1000);
+            return Math.ceil(days);
+        }
+
+        console.log(getDaysToBirthday(8, 27));
+    </script>
+
+
+    <!-- 3. 根据系统当前的月份，输出这一个月每一天的星期
+
+    2019年6月1日：星期六
+    2019年6月2日：星期日
+    .....
+    2019年6月30日：星期日 -->
+
+    <!-- 用到了回调函数 -->
+    <script>
+        //打印当前月每一天的星期
+        function print() {
+            var now = new Date();
+            var m = now.getMonth() + 1;
+            var y = now.getFullYear();
+            var days = new Date(y, m, 0).getDate(); // days 本月的总天数 0 表示上个月的最后一天
+            // [月份 m 不用减 1 实际上获取的就是这个月的总天数]
+            for (var i = 1; i <= days; i++) {
+                console.log(`${y}年${m}月${i}日：星期${getDayOfWeek(y, m, i)}`);
+            }
+        }
+
+        function getDayOfWeek(year, month, day) {
+            var d = new Date(year, month - 1, day);
+            var day = d.getDay(); //得到星期(0[周日]-6[周六])
+            switch (day) {
+                case 0:
+                    return "日";
+                case 1:
+                    return "一";
+                case 2:
+                    return "二";
+                case 3:
+                    return "三";
+                case 4:
+                    return "四";
+                case 5:
+                    return "五";
+                case 6:
+                    return "六";
+            }
+        }
+
+        print();
+    </script>
+</body>
+
+</html>
+```
+
+## 9. 正则表达式
+
+==有很多和字符串相关的需求 都可以使用正则表达式来实现 以下相关案例 在实际开发中如果想要用正则来实现 那么代码量可能会少很多==
+
+正则表达式是国际标准，跨越语言
+
+正则表达式是一个规则，用于验证字符串。
+
+### 基础
+
+1. 字面量匹配
+
+规则中直接书写字面量字符
+
+2. 特殊字符
+
+```
+.   // 	匹配除换行符 \n 之外的任何单字符。
+^   //  匹配输入字符串的开始位置。
+$   //  匹配输入字符串的结尾位置。
+```
+
+3. 转义符
+
+```
+\n // 匹配一个换行符。
+\r // 匹配一个回车符。基本使用不到, 和操作系统有关
+\t // 匹配一个制表符。等价于 \x09 和 \cI。
+\s // 匹配任何空白字符，包括空格、制表符、换页符等等。等价于 [ \f\n\r\t\v]。注意 Unicode 正则表达式会匹配全角空格符。
+\S // 匹配任何非空白字符。等价于 [^ \f\n\r\t\v]。
+\b // 匹配一个单词边界，即字与空格间的位置。
+\B // 非单词边界匹配。
+\d // 匹配一个数字字符。等价于 [0-9]。
+\D // 匹配一个非数字字符。等价于 [^0-9]。
+\w // 匹配字母、数字、下划线。等价于'[A-Za-z0-9_]'。
+\W // 匹配非字母、数字、下划线。等价于 '[^A-Za-z0-9_]'。
+\un // 匹配 n，其中 n 是一个用四个十六进制数字表示的 Unicode 字符。例如， \u00A9 匹配版权符号 (©)。\u9676\u5bb6\u4e50 ==> 陶家乐
+```
+
+转义符可以将特殊字符转义
+
+4. 字符集
+
+```
+[字符范围]
+[^字符范围] // 对字符范围取反
+```
+
+匹配中文： ```[\u4e00-\u9FA5]```
+
+匹配所有字符: ```[\s\S] 或 [\d\D] 等等```
+
+5. 量词
+
+前面的规则出现的次数
+
+```
+* // 匹配前面的子表达式零次或多次。例如，zo* 能匹配 "z" 以及 "zoo"。* 等价于{0,}。
++ //
+匹配前面的子表达式一次或多次。例如，'zo+' 能匹配 "zo" 以及 "zoo"，但不能匹配 "z"。+ 等价于 {1,}。
+? // 匹配前面的子表达式零次或一次。例如，"do(es)?" 可以匹配 "do" 或 "does" 。? 等价于 {0,1}。
+{n}: 匹配n个
+{n,}: 匹配>=n个
+{n,m}: 匹配n~m个
+```
+
+### 作业1
+
+1. 写一个正则表达式，匹配手机号
+
+11位，第一位是1
+
+`^1\d{10}$`
+
+2. 姓名必须是3-6位的中文
+
+`^[\u4e00-\u9fa5]{3,6}$`
+
+3. 密码必须是6-12位的字符，只能包含数字、字母、下划线
+
+`^\w{6,12}$`
+
+4. 写一个正则表达式，匹配邮箱
+
+xxxxxx@xxxxx.xxxx.xxxx
+
+`^\w+@\w+(\.\w+){1,2}$`
+
+5. 匹配一个座机号
+
+xxx-xxxxxxxx
+
+前面：1-3个数字
+后面：4-8个数字
+
+`^\d{1,3}-\d{4,8}$`
+
+6. 匹配一个正数
+
+`^\d+(\.\d+)?$`
+
+注意两种问题写法:
+
+1. `^\d+\.?\d+$` 1 不能匹配(点可以没有, 但是后面必须还要有数字, 所以为了区分前面和后面的数字 此时点不能没有)
+
+2. `^\d+\.\d*$` 1. 也能匹配(点和后面的数字都可以没有, 但是只有点也能匹配, 这就出问题了)
+
+
+7. 匹配一个小数
+
+`^-?\d+\.\d+$`
+
+8. 匹配一个整数
+
+`^-?\d+(\.0+)?$` ==> 默认把小数部分都是0的数字也当成是一个整数
+
+
+### JS中的应用
+
+[RegExp mdn](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+
+js中，正则表达式表现为一个对象，该对象是通过构造函数RegExp创建的
+
+**创建正则对象**
+
+1. 字面量模式`/直接书写正则表达式/`
+2. 构造函数模式`new RegExp("正则表达式")`
+
+> 开发时, 一般情况下, 都是直接书写正则表达式, 也就是采用第一种方式来创建一个正则表达式; 特殊情况: 如果正则表达式是在一个变量里面, 比如: 来自用户输入, 那么会采用第二种方式来创建一个正则表达式;
+
+**正则实例成员**
+
+- global ==> 是否开启了全局匹配 readonly 使用: `reg.global` 返回: `true`或`false`
+- ignoreCase ==> 是否开启了忽略大小写 readonly 使用: `reg.ignoreCase` 返回: `true`或`false`
+- multiline ==> 是否开启了全局匹配 readonly 使用: `reg.multiline` 返回: `true`或`false`
+- source ==> 得到规则字符串
+- ==test方法== ==> 验证某个字符串是否满足规则
+- ==exec方法== ==> execute，执行匹配，得到匹配结果。`返回的是一个数组, 数组的第一项是匹配的结果.`
+
+> 正则表达式，默认情况下，适用贪婪模式
+> 在量词后，加上?，表示进入非贪婪模式
+
+**字符串对象中的正则方法**
+
+- String.prototype.split() // 通过分离字符串成字串，将字符串对象分割成字符串数组。
+- String.prototype.replace() // 被用来在正则表达式和字符串直接比较，然后用**新的子串**来替换被匹配的子串。
+- String.prototype.search // 对正则表达式和指定字符串进行匹配搜索，返回**第一个**出现的匹配项的下标。
+- String.prototype.match() // 使用正则表达式与字符串相比较。
+
+**Simplified (无注释版)**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>贪婪模式 正则表达式的创建 test exec lastIndex</title>
+</head>
+
+<body>
+    <script>
+        var s = "1234abc123ABC";
+        var reg = /\d+/gmi;
+        console.log(reg.lastIndex, reg.test(s), reg.lastIndex); // 0 true 4
+        console.log(reg.lastIndex, reg.test(s), reg.lastIndex); // 4 true 10
+        console.log(reg.lastIndex, reg.test(s), reg.lastIndex); // 10 false 0
+        console.log(reg.lastIndex, reg.test(s), reg.lastIndex); // 0 true 4
+    </script>
+    <script>
+        var s = "1234abc123ABC";
+        var reg = /\d+/gmi;
+        console.log(reg.lastIndex, reg.test(s), reg.lastIndex); // 0 true 4
+        reg.lastIndex = 0;
+        console.log(reg.lastIndex, reg.test(s), reg.lastIndex); // 0 true 4
+    </script>
+    <script>
+        var s = "1234abc123ABC";
+        var reg = /\d+/gmi;
+        var n = 0;
+        while (reg.test(s)) {
+            n++;
+        }
+        console.log(`匹配了${n}次`); // 匹配了2次
+    </script>
+    <script>
+        var reg = /\d+?/gmi;
+        var s = "1234abc567ABC";
+        var n = 0;
+        while (reg.test(s)) {
+            n++;
+        }
+
+        console.log(`匹配了${n}次`); // 匹配了7次
+        while (result = reg.exec(s)) {
+            console.log(result[0]); // 依次输出 1234567
+        }
+    </script>
+    <script>
+        var reg = /\d+/gmi;
+        var s = "1234abc123ABC";
+        var n = 0;
+        while (reg.test(s)) {
+            n++;
+        }
+        console.log(`匹配了${n}次`); // 匹配了2次
+        while (result = reg.exec(s)) {
+            console.log(result[0]); // 第一次输出 1234 第二次输出 567
+        }
+    </script>
+</body>
+
+</html>
+```
+
+**Include annotated (有注释版)**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>贪婪模式 正则表达式的创建 test exec lastIndex</title>
+</head>
+
+<body>
+    <script>
+        /*
+                静态属性
+            RegExp.lastIndex
+        该索引表示从哪里开始下一个匹配 */
+        var s = "1234abc123ABC";
+        var reg = /\d+/gmi; // 贪婪模式 没有加量词 ?
+        console.log(reg.lastIndex, reg.test(s), reg.lastIndex);
+        console.log(reg.lastIndex, reg.test(s), reg.lastIndex);
+        console.log(reg.lastIndex, reg.test(s), reg.lastIndex);
+        console.log(reg.lastIndex, reg.test(s), reg.lastIndex);
+        // 0 true 4
+        // 4 true 10
+        // 10 false 0 这一次是从A匹配到结尾C 发现没有匹配项 所以 reg.test(s) 返回 false
+        // 0 true 4
+        /* 说明:
+        1. 一开始从下标为0的位置开始匹配 也就是 1
+        2. 第一次test结束之后 此时索引为与第一次匹配结束的位置 4 也就是 a
+        3. 当匹配到结尾之后 在重头开始匹配
+        小结:
+        1. 开始索引是0;
+        2. 下一次索引是上一次的结束位置;
+        3. 匹配到结尾后 会重头开始继续匹配  */
+    </script>
+    <script>
+        // RegExp.lastIndex 是可写的
+        var s = "1234abc123ABC";
+        var reg = /\d+/gmi;
+        console.log(reg.lastIndex, reg.test(s), reg.lastIndex); // 0 true 4
+        reg.lastIndex = 0;
+        console.log(reg.lastIndex, reg.test(s), reg.lastIndex); // 0 true 4
+    </script>
+    <script>
+        // 计算匹配次数
+        var s = "1234abc123ABC";
+        var reg = /\d+/gmi;
+        var n = 0;
+        while (reg.test(s)) {
+            n++;
+        }
+        console.log(`匹配了${n}次`); // 匹配了2次
+    </script>
+    <script>
+        // 加量词 ? => 非贪婪模式
+        var reg = /\d+?/gmi; // var reg1 = new RegExp("\d+?","gmi");
+        var s = "1234abc567ABC";
+        var n = 0;
+        while (reg.test(s)) {
+            n++;
+        }
+
+        console.log(`匹配了${n}次`); // 匹配了7次
+        /* 说明:
+        1. 不加量词 ? ==> 表示贪婪模式 ==> 也就是会尽可能多的匹配
+        2. 加量词 ? ==> 表示非贪婪模式 ==> 也就是会尽可能少的匹配 */
+        while (result = reg.exec(s)) {
+            console.log(result[0]); // 依次输出 1234567
+        }
+
+    </script>
+    <script>
+        // 不加量词 ? => 贪婪模式
+        var reg = /\d+/gmi;
+        var s = "1234abc123ABC";
+        var n = 0;
+        while (reg.test(s)) {
+            n++;
+        }
+        console.log(`匹配了${n}次`); // 匹配了2次
+        while (result = reg.exec(s)) {
+            console.log(result[0]); // 第一次输出 1234 第二次输出 567
+        }
+    </script>
+</body>
+
+</html>
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>exec</title>
+</head>
+
+<body>
+    <script>
+        var reg = /\d+/g;
+        var s = "1234abc567ABC";
+
+        // 得到所有的匹配结果和位置
+        while (result = reg.exec(s)) { // result = reg.exec(s) 这整个表达式的返回值是 result 的值
+            console.log(`匹配结果：${result[0]}，出现位置：${result.index}`);
+        }
+        // 匹配结果：1234，出现位置：0
+        // 匹配结果：456，出现位置：7
+    </script>
+</body>
+
+</html>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>字符串对象中的正则方法</title>
+</head>
+
+<body>
+    <script>
+        /* String.prototype.match() ==> 使用正则表达式与字符串相比较。 */
+        var s = "1234abc567ABC";
+        var result = s.match(/\d+/g); // 将所有匹配结果以字符串数组的形式返回
+        console.log(result); // (2) ["1234", "567"]
+    </script>
+
+
+
+    <script>
+        /* String.prototype.search() ==> 对正则表达式和指定字符串进行匹配搜索，返回第一个出现的匹配项的下标。 */
+        var s = "abc567ABC";
+        var result = s.search(/\d+/g);
+        console.log(result); // 3
+    </script>
+
+
+
+    <script>
+        var s = "hello world\tjavascript\nyes";
+        var result = s.split(/[, \-\t]/); // 将所有分割结果以字符串数组的形式返回
+        console.log(result); // (3) ["hello", "world", "javascript↵yes"]
+
+        // 第二个参数n的作用 ==> 取分割后的前n个
+        var result2 = s.split(/[, \-\t]/, 2); // 取前两个
+        console.log(result2); // (2) ["hello", "world"]
+    </script>
+
+
+
+    <script>
+        /* String.prototype.replace ==> 被用来在正则表达式和字符串直接比较，然后用新的子串来替换被匹配的子串。 */
+        var s = "hello World ! Javascript.";
+        // 将第一个空格字符替换为 逗号,
+        console.log(s.replace(" ", ",")); // hello,World ! Javascript. (默认非全局)
+        // console.log(s.replace(new RegExp(" "),","));
+        // replace 不会改变原始字符串 而是返回一个新的字符串
+        console.log(s); // hello World ! Javascript.
+    </script>
+
+
+
+    <script>
+        var s = "hello World ! Javascript.";
+        // 将全部不可见字符替换为 逗号,
+        console.log(s.replace(new RegExp(/\s/, "g"), ",")); // hello,World,!,Javascript.
+        // console.log(s.replace(/\s/g,","));
+        console.log(s); // hello World ! Javascript.
+    </script>
+
+
+
+    <script>
+        var s = "hello world";
+        // 将单词的首字符 替换为 逗号
+        s = s.replace(/\b[a-z]/g, ",");
+        console.log(s); // ,ello ,orld
+    </script>
+
+
+
+    <script>
+        /* str.replace 语法 ==> 第二个参数可以是一个函数
+        str.replace(regexp|substr, newSubStr|function)
+        相关参数说明：
+        https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace
+        */
+        var s = "hello world";
+        // 将单词的首字符 替换为 逗号
+        s = s.replace(/\b[a-z]/g, function (match) {
+            console.log(match); // 第一个参数表示匹配的内容
+            return ","; // 返回值 作为替换内容
+        });
+        // h
+        // w
+        console.log(s); // ,ello ,orld
+    </script>
+
+
+
+    <script>
+        var s = "hello world";
+        // 将单词的首字符 变成大写
+        s = s.replace(/\b[a-z]/g, function (match) {
+            return match.toUpperCase();
+        });
+        console.log(s); // Hello World
+    </script>
+
+
+
+    <script>
+        var s = "hello world\tjavascript\nyes";
+        // 将字符串中的空白字符去掉 并 转换为大驼峰的形式
+        s = s.replace(/\s*\b[a-z]\s*/g, function (match) {
+            console.log(match); // h w j y
+            return match.toUpperCase().trim();
+        });
+        console.log(s); // HelloWorldJavascriptYes
+    </script>
+</body>
+
+</html>
+```
+
+### 作业2
+
+1. 书写一个正则表达式，去匹配一个字符串，得到匹配的次数，和匹配的结果
+
+2. 得到一个字符串中中文字符的数量
+
+3. 过滤敏感词，有一个敏感词数组，需要将字符串中出现的敏感词替换为四个星号
+
+["共产党", "too young too simple", "营销"]
+
+4. 得到一个html字符串中出现的章节数量
+
+```js
+var html = `(h2{第$章}+p*5>lorem100)*10`;
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>作业2</title>
+</head>
+
+<body>
+
+    <!-- =====================作业2=========================== -->
+
+    <!-- 1. 书写一个正则表达式，去匹配一个字符串，得到匹配的次数，和匹配的结果 -->
+    <!-- 1.html -->
+    <script>
+        var reg = /\d{3}/g;
+        var s = "433afdsaf34542fsdssfsd234";
+        var n = 0;
+        var str = "";
+        while (result = reg.exec(s)) {
+            n++;
+            str += result[0] + "\n";
+        }
+        str = `匹配${n}次\n` + str;
+        console.log(str);
+        /*
+        匹配3次
+        433
+        345
+        234
+        */
+    </script>
+
+    <script>
+        var reg = /\d{3}/g;
+        var s = "433afdsaf34542fsdssfsd234";
+        var arr = s.match(reg);
+        console.log(`匹配${arr.length}次`, arr); // 匹配3次 (3) ["433", "345", "234"]
+    </script>
+
+    <!-- 2. 得到一个字符串中中文字符的数量 -->
+    <!-- 2.html -->
+    <script>
+        var reg = /[\u4e00-\u9fa5]/g;
+        var s = "fgdgg啊手动sdf阀梵蒂冈sd234";
+        var n = 0;
+        while (reg.test(s)) {
+            n++;
+        }
+        console.log(n); // 7
+    </script>
+
+    <script>
+        var reg = /[\u4e00-\u9fa5]/g;
+        var s = "fgdgg啊手动sdf阀梵蒂冈sd234";
+        console.log(`共有${s.match(reg).length}个汉字`); // 共有7个汉字
+    </script>
+
+    <!-- 3. 过滤敏感词，有一个敏感词数组，需要将字符串中出现的敏感词替换为四个星号
+
+    ["共产党", "too young too simple", "营销"] -->
+    <!-- 3.html -->
+    <script>
+        // 注意: 正则表达式的创建方式 此时如果还是使用字面量的形式来创建 就不合适了
+        var senWords = ["色情", "暴力", "卢本伟", "贸易战"]; // 实际开发中是 从数据库引入 存放在数组中操作
+        //将字符串中敏感词汇替换为指定的字符串
+        function removeSensitiveWords(s, rep) {
+            // var reg = new RegExp(`(${色情|暴力|卢本伟|贸易战})+`, "g"); // 不能写死
+            var reg = new RegExp(`(${senWords.join("|")})+`, "g"); // + ==> 连续的敏感词汇 只替换一次
+            return s.replace(reg, rep);
+        }
+
+        console.log(removeSensitiveWords("sdffs色情暴力sfsfs卢本伟牛逼dsdf贸易战sf", "****"));
+        // sdffs****sfsfs****牛逼dsdf****sf
+    </script>
+
+
+    <!-- 4. 得到一个html字符串中出现的章节数量
+
+    var html = `var html = `(h2{第$章}+p*5>lorem100)*10`;`;
+    -->
+
+    <!-- 4.html -->
+    <script>
+        var html = `...`;
+        var reg = /<h2>第\d+章<\/h2>/g;
+        var result = html.match(reg);
+        if (result) {
+            console.log(result.length); // 10
+        } else {
+            console.log(0);
+        }
+        // console.log(result);
+        // (10) ["<h2>第1章</h2>", "<h2>第2章</h2>", "<h2>第3章</h2>", "<h2>第4章</h2>", "<h2>第5章</h2>", "<h2>第6章</h2>", "<h2>第7章</h2>", "<h2>第8章</h2>", "<h2>第9章</h2>", "<h2>第10章</h2>"]
+    </script>
+</body>
+
+</html>
+```
+
+### 进阶
+
+### 捕获组
+
+用小括号包裹的部分叫做捕获组，捕获组会出现在匹配结果中
+
+捕获组可以命名，叫做具名捕获组
+
+非捕获组
+
+### 反向引用
+
+在正则表达式中，使用某个捕获组，```\捕获组编号```
+
+### 正向断言(预查)
+
+检查某个字符后面的字符是否满足某个规则，该规则不成为匹配结果，并且不称为捕获组
+
+### 负向断言(预查)
+
+检查某个字符后面的字符是否不满足某个规则，该规则不成为匹配结果，并且不称为捕获组
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>捕获组</title>
+</head>
+
+<body>
+    <script>
+        // 用小括号包裹起来的部分叫做捕获组, 捕获组会出现在匹配结果中
+        var reg = /(\d[a-z])([a-z]+)/g;
+        var s = "2afsdf-5fdgdfg-9asddf";
+        while (result = reg.exec(s)) {
+            console.log(result);
+        }
+        // (3) ["2afsdf", "2a", "fsdf", index: 0, input: "2afsdf-5fdgdfg-9asddf", groups: undefined]0: "2afsdf"1: "2a"2: "fsdf"groups: undefinedindex: 0input: "2afsdf-5fdgdfg-9asddf"length: 3__proto__: Array(0)
+        // (3) ["5fdgdfg", "5f", "dgdfg", index: 7, input: "2afsdf-5fdgdfg-9asddf", groups: undefined]
+        // (3) ["9asddf", "9a", "sddf", index: 15, input: "2afsdf-5fdgdfg-9asddf", groups: undefined]
+        // 结果数组中下标 0 的成员 仍然表示整个正则表达式的匹配结果
+        // 捕获组 ==> 会出现在匹配结果的数组里头
+        // 多出来的两个下标 1 和 2 分别表示的是两个小括号() 也就是捕获组 匹配的内容
+    </script>
+    <script>
+        var s = "2015-5-1, 2019-6-19, 2000-04-28";
+        // 需求: 得到每一个日期，并得到每个日期的年月日
+        var reg = /(\d{4})-(\d{1,2})-(\d{1,2})/g;
+        while (result = reg.exec(s)) {
+            console.log(result[0], result[1], result[2], result[3]);
+        }
+        // 2015-5-1 2015 5 1
+        // 2019-6-19 2019 6 19
+        // 2000-04-28 2000 04 28
+    </script>
+    <script>
+        // 自己试着不用捕获组实现
+        var s = "2015-5-1, 2019-6-19, 2000-04-28";
+        var newArr = s.split(",");
+        let arr = [];
+        newArr.forEach(item => {
+            arr.push(item.split("-"));
+        });
+        console.log(arr[0][0], arr[0][1], arr[0][2],
+            arr[1][0], arr[1][1], arr[1][2],
+            arr[2][0], arr[2][1], arr[2][2]);
+        // 2015 5 1  2019 6 19  2000 04 28
+    </script>
+    <script>
+        // 捕获组可以命名 ==> 具名捕获组
+        var s = "2015-5-1, 2019-6-19, 2000-04-28";
+        var reg = /(?<year>\d{4})-(?<month>\d{1,2})-(?<day>\d{1,2})/g;
+        while (result = reg.exec(s)) {
+            console.log(result.groups, result.groups.year, result.groups.month, result.groups.day);
+        }
+        // {year: "2015", month: "5", day: "1"} "2015" "5" "1"
+        // {year: "2019", month: "6", day: "19"} "2019" "6" "19"
+        // {year: "2000", month: "04", day: "28"} "2000" "04" "28"
+    </script>
+    <script>
+        // 非捕获组模式 ==> ?: ==> 表示这个加小括号的 不是一个捕获组 而仅仅把其看做是一个整体
+        // 可以提高执行效率
+        var s = "2015-5-1, 2019-6-19, 2000-04-28";
+        var reg = /(?:\d{4})-(?:\d{1,2})-(\d{1,2})/g;
+        while (result = reg.exec(s)) {
+            console.log(result[0], result[1], result[2], result[3]);
+        }
+        // 2015-5-1 1 undefined undefined
+        // 2019-6-19 19 undefined undefined
+        // 2000-04-28 28 undefined undefined
+    </script>
+    <script>
+        // 在 replace 中使用捕获组
+        var s = "2015-5-1,- 2019-6-19,- 2000-04-28";
+        // 需求 年-月-日 ==> 年/月/日
+        var reg = /(\d{4})-(\d{1,2})-(\d{1,2})/g;
+        s = s.replace(reg, function (match, g1, g2, g3) { // 1: 匹配结果 2: 第一个捕获组 3...
+            console.log(match, g1, g2, g3);
+            return `${g1}/${g2}/${g3}`;
+        })
+        console.log(s); // 2015/5/1,- 2019/6/19,- 2000/04/28
+    </script>
+    <script>
+        // 在 replace 中使用捕获组 的另一种写法
+        var s = "2015-5-1,- 2019-6-19,- 2000-04-28";
+        // 需求 年-月-日 ==> 年/月/日
+        var reg = /(\d{4})-(\d{1,2})-(\d{1,2})/g;
+        s = s.replace(reg, "$1/$2/$3"); // 利用特殊字符 $1 表示第一个捕获组 $2 ...
+        console.log(s); // 2015/5/1,- 2019/6/19,- 2000/04/28
+    </script>
+</body>
+
+</html>
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>反向引用</title>
+</head>
+
+<body>
+    <script>
+        // 反向引用 ==> 在正则表达式中 使用某个捕获组 ==> 使用: \捕获组编号
+        // 捕获组编号 参考 ==> https://blog.csdn.net/tao_sheng_yi_jiu/article/details/80369026
+        var reg = /(\d{2})\1\1/;
+        var s = "131313";
+        var s1 = "202020";
+        var s2 = "202120";
+
+        console.log(reg.test(s)); // true
+        console.log(reg.test(s1)); // true
+        console.log(reg.test(s2)); // false
+    </script>
+    <script>
+        var reg = /(\d{2})\1\1/; // 写法一
+        // var reg = /(\d{2})(\d{2})(\d{2})/; // 写法二
+        // 第二种写法 有三个捕获组 第一种写法只有一个捕获组
+        var s = "131313";
+
+        console.log(reg.exec(s));
+        // (2) ["131313", "13", index: 0, input: "131313", groups: undefined]
+        // 注意: 此时只有一个捕获组
+    </script>
+    <script>
+        // var reg = /(\d{2})\1\1/; // 写法一
+        var reg = /(\d{2})(\d{2})(\d{2})/; // 写法二
+        // 第二种写法 有三个捕获组 第一种写法只有一个捕获组
+        var s = "131313";
+
+        console.log(reg.exec(s));
+        // (4) ["131313", "13", "13", "13", index: 0, input: "131313", groups: undefined]
+        // 注意: 此时共有四个捕获组
+    </script>
+    <script>
+        // 反向引用的应用举例 ==> 面试题
+        var s = "aaaaaaaabbbbbbbbbccccccdefgggggggg";
+        // 需求: 找出该字符串中连续的字符 (不包含只出现一次的字符)
+        var reg = /(\w)\1+/g;
+        while (result = reg.exec(s)) {
+            // console.log(result);
+            console.log(result[1]);
+        }
+        // a
+        // b
+        // c
+        // g
+    </script>
+    <script>
+        // 捕获组如果有名字 那么也可以通过名字来引用
+        var s = "aaaaaaaabbbbbbbbbccccccdefgggggggg";
+        var reg = /(?<char>\w)\1+/g;
+        while (result = reg.exec(s)) {
+            console.log(result[1]);
+        }
+        // a
+        // b
+        // c
+        // g
+    </script>
+    <script>
+        // 捕获组如果有名字 那么也可以通过名字来引用
+        var s = "aaaaaaaabbbbbbbbbccccccdefgggggggg";
+        var reg = /(?<char>\w)\k<char>+/g;
+        while (result = reg.exec(s)) {
+            console.log(result[1]);
+        }
+        // a
+        // b
+        // c
+        // g
+    </script>
+</body>
+
+</html>
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>预查</title>
+</head>
+
+<body>
+    <script>
+        var s = "sdfsdf3434343sdfsa545454dfsdfsfsd6754";
+        var reg = /[a-zA-Z](\d+)/g;
+        while (result = reg.exec(s)) {
+            console.log(result); // f a d
+        }
+        // (2) ["f3434343", "3434343", index: 5, input: "sdfsdf3434343sdfsa545454dfsdfsfsd6754", groups: undefined]
+        // (2) ["a545454", "545454", index: 17, input: "sdfsdf3434343sdfsa545454dfsdfsfsd6754", groups: undefined]
+        // (2) ["d6754", "6754", index: 32, input: "sdfsdf3434343sdfsa545454dfsdfsfsd6754", groups: undefined]
+    </script>
+    <script>
+        // 正向断言(预查) ==> ?= ==> 检查某个字符后面的字符是否满足某个规则, 该规则不成为匹配结果, 并且不称为捕获组
+        var s = "sdfsdf3434343sdfsa545454dfsdfsfsd6754";
+        // 需求: 找字母 要求此字母的后面是数字
+        var reg = /[a-zA-Z](?=\d+)/g;
+        while (result = reg.exec(s)) {
+            console.log(result); // f a d
+        }
+        // ["f", index: 5, input: "sdfsdf3434343sdfsa545454dfsdfsfsd6754", groups: undefined]
+        // ["a", index: 17, input: "sdfsdf3434343sdfsa545454dfsdfsfsd6754", groups: undefined]
+        // ["d", index: 32, input: "sdfsdf3434343sdfsa545454dfsdfsfsd6754", groups: undefined]
+    </script>
+    <script>
+        // Q ==> 尝试用循环来实现
+        var s = "334353456";
+        // 从右往左 每3位加一个逗号
+        var reg = /\B(?=(\d{3})+$)/g;
+        s = s.replace(reg, ",");
+        console.log(s); // 334,353,456
+        // 说明:
+        // 1. \B 非单词边界 作用 ==> 防止一开始匹配的时候, 就正好是3的倍数, 避免第一个逗号出现在最前面
+        // 2. ?= 预查
+        // 3. (\d{3})+ 数字出现3的倍数次 3, 6, 9 ...
+        // 4. $ 结尾 ==> 必须从当前位置计算到结尾
+    </script>
+    <script>
+        // 负向断言(预查) ==> 检查某个字符后面的字符是否不满足某个规则, 该规则不成为匹配结果, 并且不称为捕获组
+        var s = "afg43223444wr423424243";
+        // 需求: 找字母 要求改字母后面跟的不是数字
+        var reg = /[a-zA-Z](?!\d+)/g;
+        while (result = reg.exec(s)) {
+            console.log(result); // a f w
+        }
+    </script>
+    <script>
+        // 判断密码强度(预备知识点, 下面将封装函数judgePwd来实现)
+        // 要求密码中必须出现小写字母、大写字母、数字、特殊字符(!@#_,.)，6-12位
+        var s = "asdfsdAf234.";
+        var s1 = "asdfsdAf234";
+        var reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#_,.]).{6,12}$/;
+        // 预查 ==> 注意: 只做检查 不会消耗(也就是说 下一次开始预查的时候 还是从头开始)
+        // 这一点不容易理解 举例来说: (?=.*[a-z]) 会从头到尾走一遍 (?=.*[A-Z]) 也会从头到尾走一遍 后面的都会 ...
+        console.log(reg.test(s)); // true ==> 预查通过
+        console.log(reg.test(s1)); // false ==> 预查不通过
+    </script>
+    <script>
+        // 判断密码强度
+        // 密码长度必须是6-12位
+        // 出现小写字母、大写字母、数字、特殊字符(!@#_,.)  -> 强
+        // 出现小写字母、大写字母、数字  -> 中
+        // 出现小写字母、大写字母  -> 轻
+        // 其他  -> 不满足要求
+        function judgePwd(pwd) {
+            if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#_,.]).{6,12}$/.test(pwd)) {
+                return "强";
+            } else if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,12}$/.test(pwd)) {
+                return "中";
+            } else if (/^(?=.*[a-z])(?=.*[A-Z]).{6,12}$/.test(pwd)) {
+                return "轻";
+            } else {
+                return "不满足要求";
+            }
+        }
+
+        console.log(judgePwd("asdADFF4.343"));
+    </script>
+</body>
+
+</html>
+```
+
+## 10. 错误处理
+
+JS中的错误分为：
+
+1. 语法错误：会导致整个脚本块无法执行。
+2. 运行错误
+   1. 运行报错：会导致当前脚本块后续代码无法执行
+   2. 运行结果不符合预期
+
+**调试错误**
+
+1. 控制台打印
+
+2. 断点调试
+
+抛出错误
+
+错误在js中本质上是一个对象，抛出错误的语法为：
+
+```js
+throw 错误对象;
+```
+
+错误对象的构造函数为Error
+
+捕获错误
+
+```js
+try{
+    //代码块1
+}
+catch(错误对象){
+    //代码块2
+}
+finally{
+    //代码块3
+}
+```
+
+当运行代码1的时候，如果发生错误，立即停止代码1的执行，转而执行代码2，错误对象为抛出的错误对象。无论代码1和代码2是否，最终都将执行代码3
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2020年9月18日</title>
+</head>
+
+<body>
+    <!-- 本章节的第三个视频只看了前面的35min还有后续的25min没有观看 -->
+    <script src="test.js"></script>
+</body>
+
+</html>
+```
+
+### test.js
+
+```js
+// function isPrime(n) {
+//     if(isNaN(n)){
+//         throw new Error("n必须是一个正常的数字");
+//     }
+//     if (n < 2) {
+//         return false;
+//     }
+//     for (var i = 2; i < n; i++) {
+//         if (n % i === 0) {
+//             return false;
+//         }
+//     }
+//     return true;
+// }
+
+// console.log(isPrime(10));
+// console.log(isPrime("abcd"));
+
+function A() {
+    console.log(B());
+    console.log("a1");
+}
+
+function B() {
+    try {
+        C();
+        console.log("b1");
+    }
+    catch (err) {
+        console.log("运行C的时候发生了问题", err)
+        return 3;
+    }
+    finally{
+        console.log("处理完成");
+    }
+}
+
+function C() {
+    throw new TypeError("asdfasfasfasfd");
+    console.log("c1");
+}
+
+A();
+
+console.log("g1");
+```
+
