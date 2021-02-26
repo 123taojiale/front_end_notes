@@ -3133,3 +3133,2686 @@ n = -7 / 3 = -2.3333 ≈ -3
 
 **求模的符号与除数相同**
 
+
+# 四、流程控制
+
+## 1. 流程图
+
+```
+1. 流程图是啥?
+    一套的标准的图形，用于描述程序的逻辑
+    通常使用流程图分析程序的流程
+2. 如何在 markdown 中画流程图?
+    可以使用 mermaid 语法来实现
+    eg: (在GitHub上渲染不出来)
+      graph TD
+      start((开始))-->if{判断}
+      if--true-->A[adsfasf]
+      if--false-->ed((结束))
+      A-->ed
+```
+
+![20210225200944](https://cdn.jsdelivr.net/gh/123taojiale/dahuyou_picture@main/blogs/20210225200944.png)
+
+- [x] 邓哥的思维：
+
+```
+graph TD
+st((开始)) --> buyPeach[买两个桃子]
+buyPeach-->if{是否碰到卖西瓜的}
+if--true-->buyXigua[买一个西瓜]
+if--false-->ed((结束))
+buyXigua-->ed
+```
+
+![20210225202008](https://cdn.jsdelivr.net/gh/123taojiale/dahuyou_picture@main/blogs/20210225202008.png)
+
+- [x] 成哥的思维：
+
+```
+graph TD
+st((开始)) --> if{是否碰到卖西瓜的}
+if--true-->买一个桃子
+if--false-->买两个桃子
+买一个桃子-->ed((结束))
+买两个桃子-->ed
+```
+
+![20210225202230](https://cdn.jsdelivr.net/gh/123taojiale/dahuyou_picture@main/blogs/20210225202230.png)
+
+
+## 2. if判断
+
+```js
+if(条件1){
+    // 代码块
+}
+else if(条件2){
+    // 代码块
+}
+else if(条件3){
+    // 代码块
+}
+//....
+else{
+    // 以上条件都不满足执行的代码块
+}
+```
+
+```
+1. 如果某个条件满足，则直接忽略后面的所有条件
+2. else if 可以有多个 (包含0个)
+3. else可以有1个或0个
+4. else可以换行，可以不换行 (看公司要求)
+5. 如果代码块只有一条语句，可以省略花括号 (不推荐)
+6. if只能出现一次
+```
+
+**补充**
+
+```
+1. prompt("提示文本");
+    若用户点击的是确定, 那么返回用户输入的内容(字符串形式)
+    若用户点击的是取消, 那么返回 null
+2. 利用 操作符 + 将字符串转换成数字
+    +字符串
+    +字符串 === Number(字符串)
+3. 得到一个随机数
+    Math.random() 该表达式返回一个0~1之间的随机数字（无法取到1）
+```
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月16日</title>
+</head>
+
+<body>
+
+    <!-- 被视为false的六个值 -->
+    <script>
+        console.log(!!null); // false
+        console.log(!!undefined); // false
+        console.log(!!false); // false
+        console.log(!!NaN); // false
+        console.log(!!0); // false
+        console.log(!!''); // false
+    </script>
+
+
+    <!-- test1.html -->
+    <script>
+        var score = 95;
+        // A：>=90  B: >=70 <90  C: >=50 <70  D: <50
+        if (score >= 90) {
+            console.log("A");
+        } else if (score >= 70) {
+            console.log("B");
+        } else if (score >= 50) {
+            console.log("C");
+        } else {
+            console.log("D");
+        }
+    </script>
+
+    <script>
+        var score = 66;
+        // 单用if语句
+        if (score >= 90) {
+            console.log("A");
+        }
+        if (score >= 70 && score < 90) {
+            console.log("B");
+        }
+        if (score >= 50 && score < 70) {
+            console.log("C");
+        }
+        if (score < 50) {
+            console.log("D");
+        }
+    </script>
+
+
+
+
+
+    <!-- test2.html [面试题] -->
+    <script>
+        if (!x) {
+            x = 0;
+        }
+        if (x++ >= 1) {
+            var x;
+            x++;
+        } else if (++x >= 2) {
+            x++;
+        } else {
+            x--;
+        }
+        console.log(x); // 3
+    </script>
+
+
+    <!--
+    1. 用户输入: prompt("提示文本")
+
+    该表达式返回结果：null 或 字符串
+
+        1. null：表示用户点击了取消
+        2. 用户输入的字符串：表示用户点击了确定，得到用户输入的结果 -->
+
+
+    <!-- 2. 将字符串转换成数字：+字符串 -->
+
+
+    <!-- test3.html -->
+    <script>
+        // 等待用户操作（确定，取消），将用户操作的结果保存到变量result中
+        // 让用户输入一个数字，如果点击了取消，输出取消，如果点击了确定，根据输入的内容判断输入是否正确
+        var result = prompt("请输入你的年龄");
+        if (result === null) {
+            console.log("点击了取消");
+        } else {
+            result = +result; //转换为数字
+            if (isNaN(result)) { // 如果 result 转换为数字是 NaN 那么执行if语句块的内容
+                // 不是正常的数字
+                console.log("输入有误");
+            } else {
+                console.log(result, typeof result);
+            }
+        }
+    </script>
+
+
+    <!--
+    3. 得到一个随机数
+
+    Math.random() 该表达式返回一个0~1之间的随机数字（无法取到1） -->
+
+    <!-- test4.html -->
+    <script>
+        console.log(Math.random());
+    </script>
+
+
+</body>
+
+</html>
+```
+
+## 3. [作业讲解]if判断
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月16日</title>
+</head>
+
+<body>
+    <!-- 作业部分 -->
+
+    <!-- 1. 提示用户输入一个三位数，若不是三位数，则提示用户输入有误；若是三位数，则判断该数能否被13整除。 -->
+    <script>
+        var input = +prompt("请输入一个三位数");
+        if (isNaN(input)) {
+            console.log("输入有误");
+        } else {
+            if (input > 100 && input < 1000) {
+                console.log('您输入的数字是:', input, input % 13 === 0 ? '能被13整除' : '不能被13整除');
+            } else {
+                console.log("输入有误");
+            }
+        }
+    </script>
+
+    <!-- 袁老师版 -->
+    <script>
+        var number = +prompt("请输入一个三位数");
+        if (isNaN(number) || number < 100 || number > 999) {
+            console.log("输入有误");
+        } else {
+            if (number % 13 === 0) {
+                console.log("能被13整除")
+            } else {
+                console.log("不能被13整除")
+            }
+        }
+    </script>
+
+
+
+
+    <!-- 2. 让用户输入一个成绩（0-100），判断这个成绩属于哪个范围并输出结果（A:90-100 B:70-89 C:60-69 D:40-59 E:0-39），若用户输入的不是0-100的数字，则输出输入有误。 -->
+    <script>
+        var input = +prompt('请输入成绩(0-100): ');
+        if (isNaN(input)) {
+            console.log("输入有误");
+        } else {
+            if (input >= 0 && input <= 100) {
+                if (input >= 90) {
+                    console.log("A");
+                } else if (input >= 70) {
+                    console.log("B");
+                } else if (input >= 60) {
+                    console.log("C");
+                } else if (input >= 40) {
+                    console.log("D");
+                } else {
+                    console.log("E");
+                }
+            } else {
+                console.log("输入有误");
+            }
+        }
+    </script>
+
+    <!-- 袁老师版 -->
+    <script>
+        var score = +prompt("请输入一个成绩（0~100）");
+        if (isNaN(score) || score < 0 || score > 100) {
+            console.log("输入有误");
+        } else {
+            if (score >= 90) {
+                console.log("A")
+            } else if (score >= 70) {
+                console.log("B")
+            } else if (score >= 60) {
+                console.log("C")
+            } else if (score >= 40) {
+                console.log("D")
+            } else {
+                console.log("E");
+            }
+        }
+    </script>
+
+
+    <!-- 3. 根据世界卫生组织推荐的计算方法，
+    男性标准体重计算方法为（身高cm－80）×70﹪
+    女性标准体重计算方法为（身高cm－70）×60﹪
+    标准体重正负10%为正常体重，低于标准体重的10%为过瘦，高于标准体重的10%为过重
+    编写程序，让用户输入性别、身高、体重，判断用户的健康状况
+
+    健康状况有3种：
+
+    1) 你的体重正常，请继续保持
+    2) 你的身体偏瘦，请加强营养
+    3) 你的身体偏胖，请加强锻炼 -->
+
+    <script>
+        // standard weight 标准体重
+        var height = +prompt("请输入您的身高(cm): "),
+            weight = +prompt("请输入您的体重(kg): "),
+            gender = prompt("请输入您的性别(男/女)"),
+            standardWeight;
+
+        if (isNaN(height) || isNaN(weight) || (gender !== '男' && gender !== '女')) {
+            console.log('输入有误');
+        } else {
+            if (gender === '男') {
+                standardWeight = (height - 80) * 0.7;
+            } else if (gender === '女') {
+                standardWeight = (height - 70) * 0.6;
+            }
+            if (weight > standardWeight * 1.1) {
+                console.log('你的身体偏胖，请加强锻炼');
+            } else if (weight < standardWeight * 0.9) {
+                console.log('你的身体偏瘦，请加强营养');
+            } else {
+                console.log('你的体重正常，请继续保持');
+            }
+        }
+    </script>
+
+
+    <!-- 袁老师版 -->
+    <script>
+        var height = +prompt("请输入身高(cm)");
+        var weight = +prompt("请输入体重(kg)");
+        var gender = prompt("请输入性别（男，女）");
+        if (isNaN(height) || isNaN(weight) || gender !== "男" && gender !== "女") {
+            console.log("输入有误");
+        } else {
+            var standardWeight; //标准体重
+            if (gender === "男") {
+                standardWeight = (height - 80) * 0.7;
+            } else {
+                standardWeight = (height - 70) * 0.6;
+            }
+
+            if (weight < standardWeight * 0.9) {
+                console.log("你的身体偏瘦，请加强营养");
+            } else if (weight > standardWeight * 1.1) {
+                console.log("你的身体偏胖，请加强锻炼")
+            } else {
+                console.log("你的体重正常，请继续保持");
+            }
+        }
+    </script>
+
+
+    <!-- 4. 某理财公司推出一种理财服务，服务规则如下：
+    若用户的理财金额在50万元以下，则每年的收益按照4%计算。
+    若用户的理财金额在50万元以上（包括50万），则每年收益按照4.5%计算。
+    若用户的理财金额超过200万，除了理财收益外，还要额外给予用户收益金额的10%
+    编写程序，让用户输入理财金额和理财年限，计算到期后的收益 -->
+
+    <script>
+        var money = +prompt("请输入您的理财金额(万): "),
+            year = +prompt("请输入您的理财年限(年): "),
+            earnMoney;
+        if (isNaN(money) || isNaN(year)) {
+            console.log('输入有误');
+        } else {
+            if (money < 50 && money > 0) {
+                earnMoney = Math.ceil(money * 0.04 * year);
+                console.log("到期后, 您的收益约为(万): ", earnMoney);
+            } else if (money > 50 && money < 200) {
+                earnMoney = Math.ceil(money * 0.045 * year);
+                console.log("到期后, 您的收益约为(万): ", earnMoney);
+            } else {
+                earnMoney = Math.ceil((money * 0.045 * year) * 1.1);
+                console.log("到期后, 您的收益约为(万): ", earnMoney);
+            }
+        }
+    </script>
+
+
+
+    <!-- 袁老师版 -->
+    <script>
+        var money = +prompt("请输入理财金额");
+        var year = +prompt("请输入理财年限");
+        if (isNaN(money) || isNaN(year) || money <= 0 || year <= 0) {
+            console.log("输入有误");
+        } else {
+            var rate = 0.04; // 年利率4%
+            if (money >= 500000) {
+                rate = 0.045;
+            }
+            var earnMoney = money * rate * year; // 收益
+            if (money >= 2000000) {
+                earnMoney += earnMoney * 0.1;
+            }
+            console.log(`总收益为：${earnMoney}`);
+        }
+    </script>
+
+
+
+    <!-- 5. 编写一个用户和计算机猜拳的游戏，用户输入剪刀、石头或布，与计算机的出拳进行比较，判断胜负 -->
+    <script>
+        var userInput = prompt("请输入(石头/剪刀/布): "),
+            ran = Math.random() * 3,
+            computer;
+
+        if (ran < 1) {
+            computer = "石头";
+            if (userInput === "石头") {
+                console.log("平局");
+            } else if (userInput === "布") {
+                console.log("胜");
+            } else {
+                console.log("负");
+            }
+        } else if (ran < 2) {
+            computer = "剪刀";
+            if (userInput === "剪刀") {
+                console.log("平局");
+            } else if (userInput === "石头") {
+                console.log("胜");
+            } else {
+                console.log("负");
+            }
+        } else {
+            computer = "布";
+            if (userInput === "布") {
+                console.log("平局");
+            } else if (userInput === "剪刀") {
+                console.log("胜");
+            } else {
+                console.log("负");
+            }
+        }
+
+        console.log("您的出是: " + userInput);
+        console.log("计算机出的是: " + computer);
+    </script>
+
+
+    <!-- 袁老师版 -->
+    <script>
+        var fist = prompt("请出拳（剪刀、石头、布）");
+        if (fist === "剪刀" || fist === "石头" || fist === "布") {
+            //正确
+            //1. 模拟计算机出拳
+            var rad = Math.random(); // 0~1
+            var pcFist; //计算机出拳结果
+            if (rad < 0.333) {
+                pcFist = "剪刀";
+            } else if (rad < 0.6666) {
+                pcFist = "石头";
+            } else {
+                pcFist = "布";
+            }
+            //2. 比较胜负
+            console.log(`你的出拳：${fist}, 电脑出拳：${pcFist}`);
+            if (fist === "剪刀" && pcFist === "布" ||
+                fist === "布" && pcFist === "石头" ||
+                fist === "石头" && pcFist === "剪刀") {
+                console.log("你胜利了！");
+            } else if (fist === pcFist) {
+                console.log("平局");
+            } else {
+                console.log("电脑胜利！");
+            }
+        } else {
+            console.log("输入有误")
+        }
+
+        // if (fist !== "剪刀" && fist !== "石头" && fist !== "布") {
+        //     console.log("输入有误")
+        // } else {
+        //     //正常
+        // }
+    </script>
+</body>
+
+</html>
+```
+
+
+## 4. switch 开关
+
+switch的语法始终可以使用if结构替代。
+
+```js
+switch(表达式){
+    case 数据1:
+        代码块
+    case 数据2:
+        代码块
+    //...
+    default:
+        代码块
+}
+```
+
+```
+1. 计算表达式的返回值，依次和case后面的数据进行严格相等的比较，如果某个相等，停止比较，然后运行其内部的代码块，再然后，依次运行之后的所有代码块。
+2. 在case分支内部，使用break语句，可以立即停止switch结构。
+3. default表示前面的所有case都不匹配时运行。可以省略
+```
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月16日</title>
+</head>
+
+<body>
+    <!-- test.html -->
+    <script>
+        var x = 20;
+        switch (x) {
+            case 1:
+                console.log("1");
+                break;
+            case 20:
+                console.log("20");
+                break;
+            case 30:
+                console.log("30");
+                break;
+            default:
+                console.log("default");
+                break;
+        }
+
+        // switch的语法始终可以使用if结构替代。 ==> 开发中很少使用 switch 语句 (甚至有的公司禁止使用)
+
+        // 1. 计算表达式的返回值， 依次和case后面的数据进行严格相等的比较， 如果某个相等， 停止比较， 然后运行其内部的代码块， 再然后， 依次运行之后的所有代码块。
+        // 2. 在case分支内部， 使用break语句， 可以立即停止switch结构。
+        // 3. default表示前面的所有case都不匹配时运行。 可以省略 ==> 相当于 if-else 里面的 else
+
+        // [补充] JavaScript中的switch语句和其他编程语言的switch语句有蛮大差别的, 传入的参数形式多样
+    </script>
+
+</body>
+
+</html>
+```
+
+## 5. 循环
+
+重复的运行一段代码
+
+JS支持3种循环结构：while循环、do-while循环、**for循环**
+
+> 在学习 ES6 之前 , 只接触到这三种循环结构
+
+**while循环**
+
+```js
+while(条件){
+    代码块（循环体）
+}
+```
+
+![20210226080626](https://cdn.jsdelivr.net/gh/123taojiale/dahuyou_picture@main/blogs/20210226080626.png)
+
+```
+死循环：条件永远满足，永远无法退出循环。
+```
+
+**do-while循环**
+
+```js
+do{
+    循环体
+} while(条件);
+```
+
+![20210226080718](https://cdn.jsdelivr.net/gh/123taojiale/dahuyou_picture@main/blogs/20210226080718.png)
+
+
+**for循环**
+
+```js
+for(初始化表达式; 条件; 条件改变表达式){
+    循环体
+}
+```
+
+![20210226080746](https://cdn.jsdelivr.net/gh/123taojiale/dahuyou_picture@main/blogs/20210226080746.png)
+
+
+**循环中的关键字**
+
+```
+循环控制语句
+    break; 跳出循环
+    continue; 停止当前循环体，进入下一次循环。
+```
+
+### test.html
+
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月16日</title>
+</head>
+
+<body>
+    <!-- 本节只介绍循环结构的语法知识 重难点在于循环的实际应用[下一小节讲解] -->
+
+
+    <!-- 输出100个hello world -->
+
+    <!-- test1.html -->
+    <script>
+        var i = 0; //当前输出的次数，初始化
+        while (i < 100) {
+            console.log("hello world");
+            i++;
+        }
+    </script>
+
+    <script>
+        for (var i = 0; i < 100; i++) {
+            console.log("hello world");
+        }
+
+        console.log("循环结束", i);
+    </script>
+
+    <!-- test2.html -->
+    <script>
+        var i = 0; //当前输出的次数
+        do {
+            console.log("hello world");
+            i++;
+        } while (i < 100);
+        console.log("循环结束");
+    </script>
+
+
+    <!-- test3.html -->
+
+    <!-- 输出 100-1 的所有数字 -->
+    <script>
+        for (var i = 1; i <= 100; i++) {
+            // 在循环体中，i的值从1变化到100
+            console.log(i);
+        }
+    </script>
+
+    <script>
+        for (var i = 100; i >= 1; i--) {
+            console.log(i);
+        }
+    </script>
+
+    <!-- 输出 1-100 的所有奇数 - 1 -->
+    <script>
+        for (var i = 1; i <= 100; i++) {
+            // 判断i是不是奇数
+            if (i % 2 !== 0) {
+                console.log(i);
+            }
+        }
+    </script>
+
+    <!-- 输出 1-100 的所有奇数 - 2 -->
+    <script>
+        for (var i = 1; i <= 100; i += 2) {
+            console.log(i);
+        }
+    </script>
+
+    <!-- 循环控制语句中的关键字
+
+    break ==> 跳出循环
+    continue ==> 停止当前循环体，进入下一次循环。 -->
+
+    <!-- test4.html -->
+
+    <script>
+        var i = 0;
+        while (i < 10) {
+            if (i === 3) {
+                i++;
+                break; // 跳出循环
+            }
+            console.log(i); // 打印整数 0 1 2
+            i++;
+        }
+    </script>
+
+    <script>
+        for (var i = 0; i < 10; i++) {
+            if (i === 3) {
+                break; // 跳出循环
+            }
+            console.log(i); // 打印整数 0 1 2
+        }
+    </script>
+
+    <script>
+        var i = 0;
+        while (i < 10) {
+            if (i === 3) {
+                i++;
+                continue; // 停止当前循环体，进入下一次循环 ==> 一旦执行 continue 那么本轮循环不会再执行后续代码
+            }
+            console.log(i); // 打印整数 0 ~ 9 (不包括3)
+            i++;
+        }
+    </script>
+
+    <script>
+        for (var i = 0; i < 10; i++) {
+            if (i === 3) {
+                continue; // 停止当前循环体，进入下一次循环 ==> 一旦执行 continue 那么本轮循环不会再执行后续代码
+            }
+            console.log(i); // 打印整数 0 ~ 9 (不包括3)
+        }
+    </script>
+
+    <script>
+        for (var i = 0; i < 3; i++) {
+            for (var j = 0; j < 3; j++) {
+                console.log(i, j);
+                if (i + j >= 2) {
+                    break;
+                }
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>
+```
+
+## 6. 循环应用
+
+**累计**
+
+```
+举例：将1-100的所有数字相加之和
+思路：准备一个变量，初始值为0，然后1-100循环，每次循环，将数字累加到变量中。
+```
+
+**查找**
+
+```
+举例：135~145之间是否存在能整除26的数字
+思路：准备一个变量，记录false，表示没有找到，然后135-145进行循环，如果发现满足条件的数字，重新记录变量为true，表示找到了，然后退出循环。
+```
+
+**嵌套的循环**
+
+```
+分开分析两层循环
+```
+
+### test.html
+
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月16日</title>
+</head>
+
+<body>
+    <!-- 累计.html -->
+    <!-- 1-100 数字相加 -->
+    <script>
+        var sum = 0; //最终的和
+        for (var i = 1; i <= 100; i++) {
+            sum += i;
+        }
+        console.log(sum); // 5050
+    </script>
+
+    <!-- 1-10 数字相乘 -->
+    <script>
+        var sum = 1;
+        for (var i = 1; i <= 10; i++) {
+            sum *= i;
+        }
+        console.log(sum); // 3628800
+    </script>
+
+    <!-- 1-100 所有奇数相加 -->
+    <script>
+        var sum = 0;
+        for (var i = 1; i <= 100; i++) {
+            if (i % 2 !== 0) {
+                sum += i;
+            }
+        }
+        console.log(sum); // 2500
+    </script>
+
+
+    <!-- 查找.html -->
+
+    <!-- 135-145 之间是否存在 能整除26的数字 -->
+    <script>
+        // 注意这种编程思想 不要把打印语句写在循环体内部 可以先定义一个变量 来记录状态
+        var isFind = false; // 是否找到
+        var min = 135,
+            max = 145;
+        for (var i = min; i <= max; i++) {
+            if (i % 26 === 0) {
+                isFind = true;
+                break;
+            }
+        }
+        if (isFind) {
+            console.log("存在");
+        } else {
+            console.log("不存在");
+        }
+    </script>
+
+    <!-- 打印135-185之间所有能整除26的数字 -->
+    <script>
+        for (var i = 135; i <= 185; i++) {
+            if (i % 26 === 0) {
+                console.log(i);
+            }
+        }
+    </script>
+
+    <!-- 打印135-185之间第一个能整除26的数字，如果不存在，输出不存在 -->
+    <script>
+        var isFind = false;
+        for (var i = 135; i <= 185; i++) {
+            if (i % 26 === 0) {
+                console.log(i);
+                isFind = true;
+                break;
+            }
+        }
+        if (!isFind) {
+            console.log("不存在");
+        }
+    </script>
+
+    <!--
+        判断一个数是不是素数（质数）
+        素数：一个大于1的整数，只能被1和自身整除
+        比如：2是一个素数
+        比如：4不是一个素数
+        思路：从1循环到这个数，记录有多少个数字能整除它
+     -->
+    <!-- 法1 -->
+    <script>
+        var num = 11;
+        var record = 0; //记录整除数量
+        for (var i = 1; i <= num; i++) {
+            if (num % i === 0) {
+                record++;
+            }
+        }
+        if (record === 2) {
+            console.log("是素数")
+        } else {
+            console.log("不是素数");
+        }
+    </script>
+
+    <!-- 法2 -->
+    <script>
+        var num = 11;
+        var isFind = false; // 没有找到
+        for (var i = 2; i < num - 1; i++) { // 这里应该写 i <= num - 1 不过写成 < 也不影响结果...
+            if (num % i === 0) {
+                isFind = true;
+                break;
+            }
+        }
+        if (num <= 1 || isFind) {
+            console.log("不是素数");
+        } else {
+            console.log("是素数");
+        }
+    </script>
+
+
+    <!-- 嵌套的循环.html -->
+    <!-- 打印1-100的所有素数 -->
+    <script>
+        for (var i = 1; i <= 100; i++) {
+            // 判断i是不是素数
+            var isFind = false; //没有找到 (从2到i-1 没有找到任何一个数能被i整除)
+            for (var j = 2; j < i - 1; j++) {
+                if (i % j === 0) {
+                    isFind = true;
+                    break;
+                }
+            }
+            if (i > 1 && !isFind) {
+                console.log(i);
+            }
+        }
+    </script>
+</body>
+
+</html>
+```
+
+## 7. [作业讲解]循环应用
+
+**作业**
+
+- [ ] 1. 在控制台中输出100个*
+
+```js
+for (var i = 0; i < 100; i++) {
+    console.log("*");
+}
+```
+
+- [ ] 2. 让用户输入*号的数量，然后输出对应数量的*
+
+```js
+var num = +prompt("请输入*的数量");
+for (var i = 0; i < num; i++) {
+    console.log("*");
+}
+```
+
+- [ ] 3. 输出一个3行5列的*号
+
+```js
+var r = 3,
+    c = 5;
+for (var i = 0; i < r; i++) {
+    //循环r次
+    //在一行内输出c个*号
+    var str = "";
+    for (var j = 0; j < c; j++) {
+        str += "*";
+    }
+    console.log(str);
+}
+```
+
+- [ ] 4. 用*号输出一个5行的直角三角形
+
+```
+*
+**
+***
+****
+*****
+```
+
+```js
+var r = 15;
+for (var i = 1; i <= r; i++) {
+    //输出一行星号，数量为i
+    var str = "";
+    for (var j = 0; j < i; j++) {
+        str += "*";
+    }
+    console.log(str);
+}
+```
+
+- [ ] 5. 用*号输出一个5行的等腰三角形
+
+```
+    *
+   ***
+  *****
+ *******
+*********
+```
+
+```js
+var r = 15;
+for (var i = 1; i <= r; i++) {
+    // 输出1行
+    var str = "";
+    // 1. 拼接空格，数量为r-i
+    for (var j = 0; j < r - i; j++) {
+        str += " ";
+    }
+    // 2. 拼接星号，数量为2*i-1
+    for (var j = 0; j < 2 * i - 1; j++) {
+        str += "*";
+    }
+    console.log(str);
+}
+```
+
+- [ ] 6. 输出1-100的所有数字
+
+```js
+for (var i = 0; i < 100; i++) {
+    console.log(i + 1);
+}
+```
+
+- [ ] 7. 输出1-100的所有奇数
+
+```js
+for (var i = 1; i < 100; i += 2) {
+    console.log(i);
+}
+```
+
+- [ ] 8. 求1-100之间所有数字之和
+
+```js
+var sum = 0;
+for (var i = 1; i <= 100; i++) {
+    sum += i;
+}
+console.log(sum); // 5050
+```
+
+- [ ] 9. 求1-100之间所有奇数之和
+
+```js
+var sum = 0;
+for (var i = 1; i <= 100; i++) {
+    if (i % 2 !== 0) {
+        sum += i;
+    }
+}
+console.log(sum); // 2500
+```
+
+- [ ] 10. 求1-10之间所有数字的积
+
+```js
+var sum = 1;
+for (var i = 1; i <= 10; i++) {
+    sum *= i;
+}
+console.log(sum); // 3628800
+```
+
+- [ ] 11. 判断数字233是不是素数。
+
+素数是指一个数（大于1）仅能被1和自身整除
+
+`题目改成: 改成 判断 1-233 哪些数是素数`
+
+```js
+var num = 233;
+var isFind = false;
+for (var i = 2; i <= num - 1; i++) {
+    if (num % i === 0) {
+        isFind = true;
+        break;
+    }
+}
+if (num <= 1 || isFind) {
+    console.log(`${num} 不是一个素数`);
+} else {
+    console.log(`${num} 是一个素数`);
+}
+```
+
+- [ ] 12. 输出1-100中的所有素数
+
+```js
+for (var j = 1; j <= 100; j++) {
+    var isFind = false;
+    for (var i = 2; i <= j - 1; i++) {
+        if (j % i === 0) {
+            isFind = true;
+            break;
+        }
+    }
+    if (j <= 1 || isFind) {
+        continue;
+        // console.log(`${j} 不是一个素数`);
+    } else {
+        console.log(`${j} 是一个素数`);
+    }
+}
+```
+
+- [ ] 13. 求1-100之间的所有素数之和
+
+```js
+var sum = 0; //记录和
+for (var i = 2; i <= 100; i++) {
+    //i是不是素数
+    var isFind = false; // 默认没有找到能被1和自身整数的其余的除数 是素数
+    for (var j = 2; j < i - 1; j++) {
+        if (i % j === 0) {
+            isFind = true; // 找到能被1和自身整数的其余的除数 不是素数
+            break;
+        }
+    }
+    if (!isFind) {
+        sum += i;
+    }
+}
+
+console.log(sum);
+```
+
+- [ ] 14. 输出99乘法表，效果如下：
+
+```
+1*1=1
+1*2=2	2*2=4
+1*3=3	2*3=6	3*3=9
+1*4=4	2*4=8	3*4=12	4*4=16
+1*5=5	2*5=10	3*5=15	4*5=20	5*5=25
+1*6=6	2*6=12	3*6=18	4*6=24	5*6=30	6*6=36
+1*7=7	2*7=14	3*7=21	4*7=28	5*7=35	6*7=42	7*7=49
+1*8=8	2*8=16	3*8=24	4*8=32	5*8=40	6*8=48	7*8=56	8*8=64
+1*9=9	2*9=18	3*9=27	4*9=36	5*9=45	6*9=54	7*9=63	8*9=72	9*9=81
+```
+
+```js
+for (var i = 1; i <= 9; i++) {
+    // 输出1行
+    // 拼接i个等式
+    var str = "";
+    for (var j = 1; j <= i; j++) {
+        str += `${j}*${i}=${i*j}\t`;
+    }
+    console.log(str);
+}
+```
+
+- [ ] 15. 将猜拳游戏升级，记录系统和玩家的积分，获胜者加1分，平局和输者不计分
+
+可参考以下效果：
+
+```
+游戏开始
+==============第1轮==============
+系统：0分，玩家：0分
+你的出拳：剪刀
+系统出拳：布
+你赢了！
+==============第2轮==============
+系统：0分，玩家：1分
+你的出拳：石头
+系统出拳：布
+你输了！
+==============游戏结束==============
+系统：1分，玩家：1分
+```
+
+```js
+console.log("游戏开始");
+var round = 1, //轮次
+    pcScore = 0, //系统分数
+    playerScore = 0; //玩家分数
+while (true) {
+    // 1轮游戏
+    console.log(`==============第${round}轮==============`);
+    console.log(`系统：${pcScore}分，玩家：${playerScore}分`);
+    var fist = prompt("请出拳（剪刀、石头、布）");
+    if (fist === null) {
+        //取消
+        break;
+    }
+    //没有取消
+    if (fist !== "剪刀" && fist !== "石头" && fist !== "布") {
+        //出拳无效
+        console.log("出拳无效，请重新出拳！");
+        continue;
+    }
+    //出拳有效
+    console.log(`你的出拳：${fist}`);
+    var pcFist = Math.random(); //系统随机出拳
+    if (pcFist < 0.3333) {
+        pcFist = "剪刀";
+    } else if (pcFist < 0.6666) {
+        pcFist = "石头";
+    } else {
+        pcFist = "布";
+    }
+    console.log(`系统出拳：${pcFist}`);
+    //判断胜负
+    if (fist === "剪刀" && pcFist === "布" ||
+        fist === "布" && pcFist === "石头" ||
+        fist === "石头" && pcFist === "剪刀") {
+        //玩家胜利
+        playerScore++;
+        console.log("你赢了！");
+    } else if (fist === pcFist) {
+        console.log("平局");
+    } else {
+        pcScore++;
+        console.log("系统胜利！");
+    }
+    //轮次+1
+    round++;
+}
+
+console.log("==============游戏结束==============");
+console.log(`系统：${pcScore}分，玩家：${playerScore}分`);
+```
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月16日</title>
+</head>
+
+<body>
+    <!-- 1. 在控制台中输出100个* -->
+    <script>
+        for (var i = 0; i < 100; i++) {
+            console.log("*");
+        }
+    </script>
+
+    <!-- 2. 让用户输入*号的数量，然后输出对应数量的* -->
+    <script>
+        var num = +prompt("请输入*的数量");
+        for (var i = 0; i < num; i++) {
+            console.log("*");
+        }
+    </script>
+
+    <!-- 3. 输出一个3行5列的*号 -->
+    <script>
+        var r = 3,
+            c = 5;
+        for (var i = 0; i < r; i++) {
+            //循环r次
+            //在一行内输出c个*号
+            var str = "";
+            for (var j = 0; j < c; j++) {
+                str += "*";
+            }
+            console.log(str);
+        }
+    </script>
+
+    <!-- 4. 用*号输出一个5行的直角三角形
+
+
+    *
+    **
+    ***
+    ****
+    *****
+    -->
+    <script>
+        var r = 15;
+        for (var i = 1; i <= r; i++) {
+            //输出一行星号，数量为i
+            var str = "";
+            for (var j = 0; j < i; j++) {
+                str += "*";
+            }
+            console.log(str);
+        }
+    </script>
+
+    <!-- 5. 用*号输出一个5行的等腰三角形
+
+
+        *
+       ***
+      *****
+     *******
+    *********
+     -->
+    <script>
+        var r = 15;
+        for (var i = 1; i <= r; i++) {
+            // 输出1行
+            var str = "";
+            // 1. 拼接空格，数量为r-i
+            for (var j = 0; j < r - i; j++) {
+                str += " ";
+            }
+            // 2. 拼接星号，数量为2*i-1
+            for (var j = 0; j < 2 * i - 1; j++) {
+                str += "*";
+            }
+            console.log(str);
+        }
+    </script>
+
+    <!-- 6. 输出1-100的所有数字 -->
+    <script>
+        for (var i = 0; i < 100; i++) {
+            console.log(i + 1);
+        }
+    </script>
+
+    <!-- 7. 输出1-100的所有奇数 -->
+    <script>
+        for (var i = 1; i < 100; i += 2) {
+            console.log(i);
+        }
+    </script>
+
+    <!-- 8. 求1-100之间所有数字之和 -->
+    <script>
+        var sum = 0;
+        for (var i = 1; i <= 100; i++) {
+            sum += i;
+        }
+        console.log(sum); // 5050
+    </script>
+
+
+    <!-- 9. 求1-100之间所有奇数之和 -->
+    <script>
+        var sum = 0;
+        for (var i = 1; i <= 100; i++) {
+            if (i % 2 !== 0) {
+                sum += i;
+            }
+        }
+        console.log(sum); // 2500
+    </script>
+
+    <!-- 10. 求1-10之间所有数字的积 -->
+    <script>
+        var sum = 1;
+        for (var i = 1; i <= 10; i++) {
+            sum *= i;
+        }
+        console.log(sum); // 3628800
+    </script>
+
+    <!-- 11. 判断数字233是不是素数。
+
+    素数是指一个数（大于1）仅能被1和自身整除 -->
+    <script>
+        var num = 233;
+        var isFind = false;
+        for (var i = 2; i <= num - 1; i++) {
+            if (num % i === 0) {
+                isFind = true;
+                break;
+            }
+        }
+        if (num <= 1 || isFind) {
+            console.log(`${num} 不是一个素数`);
+        } else {
+            console.log(`${num} 是一个素数`);
+        }
+    </script>
+
+    <!-- 12. 输出1-100中的所有素数 -->
+    <script>
+        for (var j = 1; j <= 100; j++) {
+            var isFind = false;
+            for (var i = 2; i <= j - 1; i++) {
+                if (j % i === 0) {
+                    isFind = true;
+                    break;
+                }
+            }
+            if (j <= 1 || isFind) {
+                continue;
+                // console.log(`${j} 不是一个素数`);
+            } else {
+                console.log(`${j} 是一个素数`);
+            }
+        }
+    </script>
+
+    <!-- 13. 求1-100之间的所有素数之和 -->
+    <script>
+        var sum = 0; //记录和
+        for (var i = 2; i <= 100; i++) {
+            //i是不是素数
+            var isFind = false;
+            for (var j = 2; j < i - 1; j++) {
+                if (i % j === 0) {
+                    isFind = true;
+                    break;
+                }
+            }
+            if (!isFind) {
+                sum += i;
+            }
+        }
+
+        console.log(sum);
+    </script>
+
+    <!-- 14. 输出99乘法表，效果如下：
+
+
+    1*1=1
+    1*2=2 2*2=4
+    1*3=3 2*3=6 3*3=9
+    1*4=4 2*4=8 3*4=12 4*4=16
+    1*5=5 2*5=10 3*5=15 4*5=20 5*5=25
+    1*6=6 2*6=12 3*6=18 4*6=24 5*6=30 6*6=36
+    1*7=7 2*7=14 3*7=21 4*7=28 5*7=35 6*7=42 7*7=49
+    1*8=8 2*8=16 3*8=24 4*8=32 5*8=40 6*8=48 7*8=56 8*8=64
+    1*9=9 2*9=18 3*9=27 4*9=36 5*9=45 6*9=54 7*9=63 8*9=72 9*9=81
+    -->
+    <script>
+        for (var i = 1; i <= 9; i++) {
+            // 输出1行
+            //拼接i个等式
+            var str = "";
+            for (var j = 1; j <= i; j++) {
+                str += `${j}*${i}=${i*j}\t`;
+            }
+            console.log(str);
+        }
+    </script>
+
+    <!-- 15. 将猜拳游戏升级，记录系统和玩家的积分，获胜者加1分，平局和输者不计分
+
+    可参考以下效果：
+
+
+    游戏开始
+    ==============第1轮==============
+    系统：0分，玩家：0分
+    你的出拳：剪刀
+    系统出拳：布
+    你赢了！
+    ==============第2轮==============
+    系统：0分，玩家：1分
+    你的出拳：石头
+    系统出拳：布
+    你输了！
+    ==============游戏结束==============
+    系统：1分，玩家：1分
+    -->
+    <script>
+        console.log("游戏开始");
+        var round = 1, //轮次
+            pcScore = 0, //系统分数
+            playerScore = 0; //玩家分数
+        while (true) {
+            // 1轮游戏
+            console.log(`==============第${round}轮==============`);
+            console.log(`系统：${pcScore}分，玩家：${playerScore}分`);
+            var fist = prompt("请出拳（剪刀、石头、布）");
+            if (fist === null) {
+                //取消
+                break;
+            }
+            //没有取消
+            if (fist !== "剪刀" && fist !== "石头" && fist !== "布") {
+                //出拳无效
+                console.log("出拳无效，请重新出拳！");
+                continue;
+            }
+            //出拳有效
+            console.log(`你的出拳：${fist}`);
+            var pcFist = Math.random(); //系统随机出拳
+            if (pcFist < 0.3333) {
+                pcFist = "剪刀";
+            } else if (pcFist < 0.6666) {
+                pcFist = "石头";
+            } else {
+                pcFist = "布";
+            }
+            console.log(`系统出拳：${pcFist}`);
+            //判断胜负
+            if (fist === "剪刀" && pcFist === "布" ||
+                fist === "布" && pcFist === "石头" ||
+                fist === "石头" && pcFist === "剪刀") {
+                //玩家胜利
+                playerScore++;
+                console.log("你赢了！");
+            } else if (fist === pcFist) {
+                console.log("平局");
+            } else {
+                pcScore++;
+                console.log("系统胜利！");
+            }
+            //轮次+1
+            round++;
+        }
+
+        console.log("==============游戏结束==============");
+        console.log(`系统：${pcScore}分，玩家：${playerScore}分`);
+    </script>
+
+</body>
+
+</html>
+```
+
+## 8. 数组
+
+`数组用于存放多个数据`
+
+**创建一个数组**
+
+```
+1. new Array(长度)
+    长度: 数组里面的数据总数，长度一定是一个非负整数
+        new Array(数据, 数据, 数据....)
+        创建一个数组，并初始化其每一项的值
+    数组项: 数组其中的一项数据
+
+2. [数据,数据,数据,....]
+    创建一个数据，并初始化其每一项的值
+```
+
+**认识数组的本质**
+
+```
+数组的本质是一个对象
+   - length属性：数组的长度，会自动变化，值为最大下标+1
+   - 数字字符串属性：叫做下标，也叫做索引，相当于数组中每个数据的编号，下标从0开始排列
+连续下标的取值范围：0 ~ length -1，如果给length直接赋值，会导致数组可能被截断
+实际开发中，不要给length赋值。
+```
+
+**下标**
+
+```
+通常情况下，下标是连续的。
+下标不连续的数组，叫做稀松数组。(讲稀松数组 , 主要是为了面试)
+```
+
+**数组的常见操作**
+
+```
+1. 添加数组项
+   - 数组[长度] = 数据：向数组末尾添加一个数据
+   - 数组.push(数据): 向数组末尾添加一个数据
+   - 数组.unshift(数据)：向数组起始位置添加一个数据，会导致数组每一项的下标向后移动
+   - 数组.splice(下标, 0, 添加的数据): 从指定下标位置开始，删除0个，然后在该位置插入添加的数据，如果下标超过范围，则按照范围的边界进行处理。
+   PS: push、unshift、splice 也可以添加多个数据
+
+2. 删除数据
+   - delete 数组[下标]: 这种做法不会导致数组其他的属性发生变化，因此，该做法会导致产生稀松数组，所以不推荐使用该做法。
+   - 数组.pop(): 删除数组的最后一项，该表达式返回最后一项的数据(若数组本身是空 , 那么返回的是 `undefined`)
+   - 数组.shift()：删除数组第一项，该表达式返回第一项的数据(若数组本身是空 , 那么返回的是 `undefined`)
+   - 数组.splice(下标, 删除的数量, 添加的数据): 从指定下标位置开始，删除指定数量，然后在该位置插入添加的数据，如果下标超过范围，则按照范围的边界进行处理。返回一个新数组，该数组记录被删除的数据。
+
+3. 其他操作
+   - 数组.slice(起始位置下标, 结束位置下标)：将起始位置到结束位置之间的数据拿出来，得到一个新的数组，该函数不会改变原数组；注意：结束下标取不到
+     下标可以写负数，如果是负数，则从数组的末尾开始计算。
+     如果不写结束下标，则直接取到末尾。
+   - 数组清空
+     数组.splice(0, 数组.length);
+     数组.length = 0;
+   - 查找数组中某一项的下标
+     数组.indexOf(数据)
+     从数组中依次查找对应的数据，查找时使用严格相等进行比较。找到第一个匹配的下标，返回。如果没有找到，则得到-1；
+     数组.lastIndexOf(数据)
+     功能和indexOf类似，只是查找的是最后一个匹配的下标
+   - 数组.fill
+     数组.fill(数据)：将数组的所有项，填充为指定的数据
+     数组.fill(数组, 开始下标): 将数组从开始下标起，到数组的末尾，填充为指定的数据
+     数组.fill(数组, 开始下标，结束下标): 将数组从开始下标起，到数组的结束下标（取不到），填充为指定的数据
+```
+
+**语法补充**
+
+```
+1. in关键字
+   判断某个属性在对象中是否存在
+   属性名 in 对象
+
+2. for-in  foreach 循环
+   for(var prop in 对象){
+       //循环体
+   }
+   取出对象的所有属性名，每次循环将其中一个属性名赋值给变量prop，运行循环体。
+```
+
+### test.html
+
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月16日</title>
+</head>
+
+<body>
+    <!-- 数组这一章节实际上并不属于流程控制的知识点
+        不过由于JavaScript中的数组比较好理解 所以就提到这里讲了 -->
+
+
+    <!-- test1.html -->
+    <script>
+        var arr = new Array(20);
+        console.log(arr); // (20) [empty × 20]
+    </script>
+
+    <script>
+        var arr = new Array(1, 5, 354, 234, 11);
+        console.log(arr); // (5) [1, 5, 354, 234, 11]
+    </script>
+
+    <script>
+        var arr = [1, 5, 354, 234, 11];
+        console.log(arr); // (5) [1, 5, 354, 234, 11]
+    </script>
+
+    <script>
+        var arr = [34, "asdf", true, null, undefined, {
+            x: 1,
+            y: 34
+        }];
+        console.log(typeof arr); // "object" 数组的本质就是对象
+        console.log(arr.length); // 6
+        // 得到数组第1项数据
+        console.log(arr[0]); // 34
+        // 得到数组第6项数据
+        console.log(arr[5].x); // 1
+    </script>
+
+    <!-- 面试题 -->
+    <script>
+        var arr = [3, 6, 23, 4];
+        arr[0] = 10; // 0 会自动转换为 "0"
+        arr["0"] = 5;
+        console.log(arr[0], arr["0"]); // 5 5
+    </script>
+
+    <script>
+        var arr = [3, 6, 23, 4, 66, 232, 44];
+        console.log(arr); // (7) [3, 6, 23, 4, 66, 232, 44]
+
+        // 可以给数组加属性 [不影响索引值]
+        arr.abc = "asdfasdfsadf";
+        console.log(arr); // (7) [3, 6, 23, 4, 66, 232, 44, abc: "asdfasdfsadf"]
+
+        // 可以给数组加索引
+        arr[7] = 333; // 给数组的第8项赋值 333
+        console.log(arr); // (8) [3, 6, 23, 4, 66, 232, 44, 333, abc: "asdfasdfsadf"]
+    </script>
+
+    <!-- ## 认识数组的本质
+
+    数组的本质是一个对象
+
+    - length属性：数组的长度，会自动变化，值为最大下标+1
+    - 数字字符串属性：叫做下标，也叫做索引，相当于数组中每个数据的编号，下标从0开始排列
+
+
+    连续下标的取值范围：0 ~ length -1，如果给length直接赋值，会导致数组可能被截断
+
+    实际开发中，不要给length赋值。 -->
+
+    <!-- test2.html -->
+    <script>
+        var obj = {
+            "0": "asdfasdf",
+            "1": "asdfasfsdgfffd",
+            length: 2
+        };
+
+        console.log(obj); // {0: "asdfasdf", 1: "asdfasfsdgfffd", length: 2}
+        // console.log(obj.0); // 0不是合法的标识符
+        console.log(obj["0"]); // "asdfasdf" 属性表达式
+        console.log(obj[0]); // "asdfasdf" 0 ==> "0"
+    </script>
+
+    <!-- ## 下标
+
+    通常情况下，下标是连续的。
+
+    下标不连续的数组，叫做稀松数组。 -->
+
+    <!-- test3.html -->
+    <script>
+        var arr = [3, 6, 7, 82, 2, 1];
+        arr[10] = "abc"; // 稀松数组 不存在下标为 6 ~ 10 的数组成员
+        console.log(arr); // (11) [3, 6, 7, 82, 2, 1, empty × 4, "abc"]
+    </script>
+
+    <script>
+        var arr = [, , , "abc"]; // 稀松数组 不存在下标为 0 1 2 的数组成员 [不存在 ≠ undefined]
+        console.log(arr); // (4) [empty × 3, "abc"]
+    </script>
+
+    <script>
+        var arr = new Array(100); // 稀松数组 下标为 0 ~ 99 的数组成员
+        console.log(arr); // (100) [empty × 100]
+    </script>
+
+    <!-- ## 数组的常见操作 -->
+
+    <!-- ### 添加数组项
+
+    - 数组[长度] = 数据：向数组末尾添加一个数据
+    - 数组.push(数据): 向数组末尾添加一个数据
+    - 数组.unshift(数据)：向数组起始位置添加一个数据，会导致数组每一项的下标向后移动
+    - 数组.splice(下标, 0, 添加的数据): 从指定下标位置开始，删除0个，然后在该位置插入添加的数据，如果下标超过范围，则按照范围的边界进行处理。
+
+    push、unshift、splice一次可以添加多个数据 -->
+
+    <!-- test4.html -->
+    <script>
+        var arr = [1, 2, 3, 4];
+        // 数组[长度] = 数据：向数组末尾添加一个数据
+        arr[arr.length] = "afasf"; // 向末尾添加一项 [不建议的写法]arr[4] = "afasf"; // 这样就写死了
+        arr[arr.length] = "afasf1"; // 向末尾添加一项
+        arr[arr.length] = "afasf2"; // 向末尾添加一项
+        arr[arr.length] = "afasf3"; // 向末尾添加一项
+
+        console.log(arr); // (8) [1, 2, 3, 4, "afasf", "afasf1", "afasf2", "afasf3"]
+    </script>
+
+    <script>
+        var arr = [1, 2, 3, 4];
+        // 数组.push(数据): 向数组末尾添加一个数据数组.push(数据): 向数组末尾添加一个数据
+        arr.push("abc", "bcd"); // 一次可以添加多个数据
+        arr.push("bcd");
+        arr.push({
+            name: "Adsf",
+            age: 18
+        });
+        console.log(arr); // (8) [1, 2, 3, 4, "abc", "bcd", "bcd", {…}]
+    </script>
+
+    <script>
+        var arr = [1, 2, 3, 4];
+        // 数组.unshift(数据)：向数组起始位置添加一个数据，会导致数组每一项的下标向后移动
+        arr.unshift(1, 2, 3); // 一次可以添加多个数据
+        console.log(arr); // (7) [1, 2, 3, 1, 2, 3, 4]
+    </script>
+
+    <script>
+        var arr = [1, 2, 3, 4];
+        arr.splice(2, 0, "abc", "bcd"); // 使用splice加数据
+        console.log(arr); // (6) [1, 2, "abc", "bcd", 3, 4]
+        arr.splice(100, 0, "AAA", "BBB"); // 下标越界的情况 ==> 直接在末尾添加数据 类似于 push
+        console.log(arr); // (8) [1, 2, "abc", "bcd", 3, 4, "AAA", "BBB"] ==> 不会生成稀松数组
+    </script>
+
+    <!-- ### 删除数据
+
+    - delete 数组[下标]: 这种做法不会导致数组其他的属性发生变化，因此，该做法会导致产生稀松数组，所以不推荐使用该做法。
+    - 数组.pop(): 删除数组的最后一项，该表达式返回最后一项的数据
+    - 数组.shift()：删除数组第一项，该表达式返回第一项的数据
+    - 数组.splice(下标, 删除的数量, 添加的数据): 从指定下标位置开始，删除指定数量，然后在该位置插入添加的数据，
+    如果下标超过范围，则按照范围的边界进行处理。返回一个新数组，该数组记录被删除的数据。 -->
+    <!-- test5.html -->
+    <script>
+        var arr = [1, 2, 3, 4];
+        // delete 数组[下标]: 这种做法不会导致数组其他的属性发生变化，因此，该做法会导致产生稀松数组，所以不推荐使用该做法。
+        delete arr[3];
+        console.log(arr); // (4) [1, 2, 3, empty]
+    </script>
+
+    <script>
+        var arr = ['a', 'b', 'c', 'd'];
+        // 数组.pop(): 删除数组的最后一项，该表达式返回最后一项的数据
+        var n = arr.pop();
+        console.log(arr); // (3) ["a", "b", "c"]
+        console.log(n); // "d"
+    </script>
+
+    <script>
+        var arr = ['a', 'b', 'c', 'd'];
+        // 数组.shift()：删除数组第一项，该表达式返回第一项的数据
+        var n = arr.shift();
+        console.log(arr); // (3) ["b", "c", "d"]
+        console.log(n); // "a"
+    </script>
+
+    <script>
+        var arr = ['a', 'b', 'c', 'd'];
+        // 数组.splice(下标, 删除的数量, 添加的数据): 从指定下标位置开始，删除指定数量，然后在该位置插入添加的数据，
+        // 如果下标超过范围，则按照范围的边界进行处理。返回一个新数组，该数组记录被删除的数据。
+        var n = arr.splice(1, 2);
+        console.log(arr, n); // (2) ["a", "d"] (2) ["b", "c"]
+    </script>
+
+    <script>
+        var arr = ['a', 'b', 'c', 'd'];
+        // 数组.splice(下标, 删除的数量, 添加的数据): 从指定下标位置开始，删除指定数量，然后在该位置插入添加的数据，
+        // 如果下标超过范围，则按照范围的边界进行处理。返回一个新数组，该数组记录被删除的数据。
+        var n = arr.splice(1, 1000); // 等效于: arr.splice(1, arr.length - 1)
+        console.log(arr, n); // ["a"] (3) ["b", "c", "d"]
+    </script>
+
+    <!-- ### 其他操作
+
+    - 数组.slice(起始位置下标, 结束位置下标)：将起始位置到结束位置之间的数据拿出来，得到一个新的数组，该函数不会改变原数组；注意：结束下标取不到
+
+    下标可以写负数，如果是负数，则从数组的末尾开始计算。
+
+    如果不写结束下标，则直接取到末尾。
+
+    - 数组清空
+
+    数组.splice(0, 数组.length);
+
+    数组.length = 0;
+
+    - 查找数组中某一项的下标
+
+    数组.indexOf(数据)
+
+    从数组中依次查找对应的数据，查找时使用严格相等进行比较。找到第一个匹配的下标，返回。如果没有找到，则得到-1；
+
+    数组.lastIndexOf(数据)
+
+    功能和indexOf类似，只是查找的是最后一个匹配的下标
+
+    - 数组.fill
+
+    数组.fill(数据)：将数组的所有项，填充为指定的数据
+
+    数组.fill(数组, 开始下标): 将数组从开始下标起，到数组的末尾，填充为指定的数据
+
+    数组.fill(数组, 开始下标，结束下标): 将数组从开始下标起，到数组的结束下标（取不到），填充为指定的数据 -->
+
+    <!-- test6.html -->
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, 7];
+        // 数组.slice(起始位置下标, 结束位置下标)：将起始位置到结束位置之间的数据拿出来，得到一个新的数组，该函数不会改变原数组；注意：结束下标取不到
+        var newArr = arr.slice(3, 6); // slice 是复制操作 splice 是剪切操作
+        console.log(newArr, arr); // (3) [4, 5, 6] (7) [1, 2, 3, 4, 5, 6, 7]
+    </script>
+
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, 7];
+        var newArr = arr.splice(3, 3); // slice 是复制操作 splice 是剪切操作
+        console.log(newArr, arr); // (3) [4, 5, 6] (4) [1, 2, 3, 7]
+    </script>
+
+    <!-- slice() -->
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, 7];
+        var newArr = arr.slice(-4, -1); // 从倒数第4个复制到倒数第1个(不包括)[注意:只能从左到右]
+        console.log(newArr, arr); // (3) [4, 5, 6] (7) [1, 2, 3, 4, 5, 6, 7]
+    </script>
+
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, 7];
+        var newArr = arr.slice(-4, 0); // 取到的 newArr 是一个空数组 啥也没有 因为不能从右向左取
+        console.log(newArr, arr); // [] (7) [1, 2, 3, 4, 5, 6, 7]
+    </script>
+
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, 7];
+        var newArr = arr.slice(-4, arr.length); // 放一个不存在的下标 直接取到最后一个成员
+        console.log(newArr, arr); // (4) [4, 5, 6, 7] (7) [1, 2, 3, 4, 5, 6, 7]
+    </script>
+
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, 7];
+        var newArr = arr.slice(-4); // 如果不写结束下标，则直接取到末尾。 结果同上
+        console.log(newArr, arr); // (4) [4, 5, 6, 7] (7) [1, 2, 3, 4, 5, 6, 7]
+    </script>
+
+
+    <!-- splice() -->
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, 7];
+        var newArr = arr.splice(-4, 3); // slice 是复制操作 splice 是剪切操作
+        console.log(newArr, arr); // (3) [4, 5, 6] (4) [1, 2, 3, 7]
+    </script>
+
+    <!-- 数组清空 ==> 数组.splice(0, 数组.length);-->
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, 7];
+        arr.splice(0, arr.length);
+        console.log(arr); // []
+    </script>
+
+    <!-- 数组清空 ==> 数组.length = 0;-->
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, 7];
+        arr.length = 0;
+        console.log(arr); // []
+    </script>
+
+
+    <!-- test7.html -->
+    <!-- indexOf() -->
+    <script>
+        var arr = [1, 2, 3, 4, 3, 6, 3];
+        var index1 = arr.indexOf(3);
+        console.log(arr, index1); // (7) [1, 2, 3, 4, 3, 6, 3] 2
+        var index2 = arr.indexOf("3");
+        console.log(arr, index2); // (7) [1, 2, 3, 4, 3, 6, 3] -1
+    </script>
+
+    <!-- lastIndexOf() -->
+    <script>
+        var arr = [1, 2, 3, 4, 3, 6, 3];
+        // 数组.lastIndexOf(数据)
+        // 功能和indexOf类似， 只是查找的是最后一个匹配的下标
+        var index = arr.lastIndexOf(3);
+        console.log(arr, index); // (7) [1, 2, 3, 4, 3, 6, 3] 6
+    </script>
+
+    <!--
+    数组.fill
+    数组.fill(数据)： 将数组的所有项， 填充为指定的数据
+    数组.fill(数组, 开始下标): 将数组从开始下标起， 到数组的末尾， 填充为指定的数据
+    数组.fill(数组, 开始下标， 结束下标): 将数组从开始下标起， 到数组的结束下标（ 取不到）， 填充为指定的数据
+    -->
+
+    <!-- test8.html -->
+    <!-- fill() -->
+    <script>
+        var arr = new Array(5);
+        arr.fill("abc");
+        console.log(arr); // (5) ["abc", "abc", "abc", "abc", "abc"]
+    </script>
+
+    <!-- ## 语法补充 -->
+
+    <!-- ### in关键字
+
+    判断某个属性在对象中是否存在
+
+    属性名 in 对象
+
+    [注意: 属性名是string类型]
+    -->
+
+    <!-- in关键字.html -->
+    <script>
+        var obj = {
+            a: 1,
+            b: 324,
+            c: "asdfas"
+        };
+        console.log("a" in obj); // true
+    </script>
+
+    <!-- 面试题 -->
+    <script>
+        var arr = [23, 65, 7, 7];
+        console.log(arr); // (4) [23, 65, 7, 7]
+        console.log(23 in arr); // false
+        // 注意: in关键字判断的是一个属性名是否存在 数组本质上是一个对象 在这个数组中 存在的属性名有:
+        // 0
+        // 1
+        // 2
+        // 3
+        // length
+        // __proto__
+    </script>
+
+
+    <!-- ### for-in foreach 循环
+
+        for(var prop in 对象){
+        //循环体
+        }
+
+    取出对象的所有属性名，每次循环将其中一个属性名赋值给变量prop，运行循环体。 -->
+
+    <!-- forin循环.html -->
+    <script>
+        var obj = {
+            a: 1,
+            b: 32,
+            c: "asd"
+        };
+        // 取出对象的所有属性名，每次循环将其中一个属性名赋值给变量prop，运行循环体。
+        for (var prop in obj) {
+            console.log(prop); // "a" "b" "c"
+        }
+        // 输入 forin 可以快速生成模板
+    </script>
+
+    <!-- 面试题 ==> for 和 forin 的区别? ==> 答: 最大的区别就是遍历稀松数组 -->
+
+    <!-- for -->
+    <script>
+        var arr = ["abc", "bcd", "234", , , , 54, 2, 1];
+        console.log(arr); // (9) ["abc", "bcd", "234", empty × 3, 54, 2, 1]
+
+        var newArr = [];
+        // 稀松数组 ==> for ==> 不会忽略不存在的成员
+        for (var i = 0; i < arr.length; i++) {
+            newArr.push(arr[i]);
+        }
+
+        console.log(newArr); // (9) ["abc", "bcd", "234", undefined, undefined, undefined, 54, 2, 1]
+    </script>
+
+    <!-- forin -->
+    <script>
+        var arr = ["abc", "bcd", "234", , , , 54, 2, 1];
+        console.log(arr); // (9) ["abc", "bcd", "234", empty × 3, 54, 2, 1]
+
+        var newArr = [];
+
+        // 稀松数组 ==> forin ==> 忽略不存在的成员
+        for (var index in arr) {
+            newArr.push(arr[index]);
+            console.log(index, typeof index, arr[index]);
+        }
+        console.log(newArr); // (6) ["abc", "bcd", "234", 54, 2, 1]
+        /*
+        "0" "string" "abc"
+        "1" "string" "bcd"
+        "2" "string" "234"
+        "6" "string" 54
+        "7" "string" 2
+        "8" "string" 1
+         */
+    </script>
+
+
+    <!-- test8.html -->
+
+    <!-- 面试题 ==> 创建一个长度为100的数组，给数组的每一项赋值为"abc" -->
+
+    <!-- 错误写法 forin -->
+    <script>
+        var arr = new Array(100); // 创建一个长度为100的数组
+
+        for (var index in arr) {
+            arr[index] = "abc";
+            // console.log(1); // 一个1都不会打印  该循环体不会执行
+        }
+
+        console.log(arr); // (100) [empty × 100]
+    </script>
+
+    <!-- 正确写法 for -->
+    <script>
+        var arr = new Array(100);
+
+        for (var i = 0; i < arr.length; i++) {
+            arr[i] = "abc";
+            // console.log(1); // 打印100个1
+        }
+
+        console.log(arr); // (100) ["abc".....(共100个).....]
+    </script>
+</body>
+
+</html>
+```
+
+**notes**
+
+`这一部分的 test.html 内容过长了 得把它们给拆分到本节对应的知识点下面`
+
+## 9. 数组应用
+
+**作业**
+
+```
+1. 提示用户输入数组的长度，以及数组每一项的值，然后输出该数组
+2. 初始化一个数字数组，然后求该数组所有项之和
+3. 初始化一个数字数组，然后输出数组中所有的奇数
+4. 初始化一个数字数组，然后输出数组中所有的素数
+5. 斐波拉契数列是这样一种数列：1  1  2  3  5  8  13 ......
+   数列前两位为1，第n位=第n-1位+第n-2位
+   让用户输入斐波拉契数列的长度，在控制台中打印该长度的斐波拉契数列
+6. 定义一个用户数组，数组的每一项是一个用户对象，用户对象中包含账号和密码，随意初始化一些对象放入数组中。然后提示用户输入账号和密码，判断是否登录成功
+7. 初始化一个5*5的二维数组，数组每一项是一个数字，计算对角线之和
+8. 初始化一个数字数组（数据随意），对该数组进行升序排序，然后输出结果
+   思路提示：
+      数组的排序有多种算法可以完成，这里介绍其中一种：冒泡排序算法
+   冒泡排序算法的原理如下：
+      - 比较相邻的元素。如果第一个比第二个大，就交换他们两个。
+      - 对每一对相邻元素做同样的工作，从开始第一对到结尾的最后一对。在这一点，最后的元素应该会是最大的数。
+      - 针对所有的元素重复以上的步骤，除了已排好序的元素。
+9. 有一个数组，存放了一些数字，找出出现频率最高的数字
+```
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月16日</title>
+</head>
+
+<body>
+    <!-- 预备知识 -->
+
+    <!-- test1.html -->
+    <!-- 面试题 ==> 数组的本质：对象 （引用类型） -->
+    <script>
+        var arr1 = [3, 5, 7, 8, 2]; // arr1中存放的是地址
+        var arr2 = arr1; // arr2中存放的是地址
+        arr2[0] = 5;
+        console.log(arr1 === arr2); // true
+        console.log(arr1[0], arr2[0]); // 5 5
+    </script>
+
+    <!-- 如何复制（克隆，产生一个全新的对象） -->
+    <script>
+        var arr1 = [3, 5, 7, 8, 2];
+        var arr2 = arr1.slice();
+        arr2[0] = 5;
+        console.log(arr1 === arr2); // false
+        console.log(arr1[0], arr2[0]); // 3 5
+    </script>
+
+    <!-- test2.html -->
+    <!-- 对数组求和 -->
+    <script>
+        var arr = [3, 7, 6, 4, 5];
+        var sum = 0;
+        for (var i = 0; i < arr.length; i++) {
+            sum += arr[i];
+        }
+        console.log(sum); // 25
+    </script>
+
+    <!-- test3.html -->
+    <!-- 二维数组：数组中的每一项是一个数组 -->
+    <script>
+        // 3*3的二维数组
+        var arr = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ];
+
+        // 输出二维数组的每一项
+        for (var i = 0; i < arr.length; i++) {
+
+            for (var j = 0; j < arr[i].length; j++) {
+                console.log(arr[i][j]);
+            }
+
+        }
+
+        // 对二维数组求和
+        var sum = 0;
+        for (var i = 0; i < arr.length; i++) {
+            for (var j = 0; j < arr[i].length; j++) {
+                sum += arr[i][j];
+            }
+        }
+        console.log(sum); // 45
+    </script>
+
+    <!-- test4.html -->
+    <!-- 将数组的每一项进行字符串拼接 -->
+    <script>
+        var arr = [3, 4, 6, 1, 3];
+
+        // 输出：3, 4, 6, 1, 3
+        var str = "";
+        for (var i = 0; i < arr.length; i++) {
+            str += arr[i];
+            if (i < arr.length - 1) {
+                str += ",";
+            }
+        }
+        console.log(str); // "3,4,6,1,3"
+    </script>
+
+    <script>
+        var arr = [3, 4, 6, 1, 3];
+        // 数组.join(分隔符)，该函数返回一个字符串
+        var str = arr.join(",");
+        console.log(str); // "3,4,6,1,3"
+    </script>
+
+    <!-- test5.html -->
+    <!-- 数组 与 数组 拼接 -->
+    <script>
+        var arr1 = [34, 5, 2, 1];
+        var arr2 = ["abc", "bcd"];
+        // 数组1.concat(数组2)
+        // 将数组2的所有元素 拼接到 数组1 的末尾，产生一个新数组返回，该表达式不会对原数组造成任何影响
+        var arr3 = arr1.concat(arr2);
+        console.log(arr1); // (4) [34, 5, 2, 1]
+        console.log(arr2); // (2) ["abc", "bcd"]
+        console.log(arr3); // (6) [34, 5, 2, 1, "abc", "bcd"]
+    </script>
+
+
+</body>
+
+</html>
+```
+
+## 10. [作业讲解]数组应用
+
+[JS数组去重的10种方法 csdn](https://blog.csdn.net/weixin_42412046/article/details/81459294)
+
+### test.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020年9月16日</title>
+</head>
+
+<body>
+    <!-- 1. 提示用户输入数组的长度，以及数组每一项的值，然后输出该数组 -->
+    <!-- 本题的目的: 我们需要知道 大多数情况下 数组中的值不是我们自己确定的 而是用户输入的值 -->
+    <script>
+        var len = +prompt("请输入数组的长度: "),
+            arr = [];
+        for (var i = 0; i < len; i++) {
+            item = +prompt(`请输入第${i+1}项: `); // bug ==> 输入的数据不一定都是数字
+            arr.push(item);
+        }
+        console.log(arr);
+    </script>
+
+    <!-- 袁老师 -->
+    <script>
+        var len = +prompt("请输入数组的长度");
+        if (isNaN(len) || len < 0) {
+            console.log("输入有误");
+        } else {
+            //输入正确
+            var arr = []; // var arr = new Array(len);
+            for (var i = 0; i < len; i++) {
+                // 提示用户输入数组的这一项的值
+                arr[i] = prompt("请输入数组第" + (i + 1) + "项的值"); // 若 i + 1 不加括号 那么会先拼接 i 再拼接 1
+            }
+            console.log(arr);
+        }
+    </script>
+
+    <!-- 2. 初始化一个数字数组，然后求该数组所有项之和 -->
+    <script>
+        var arr = [1, 2, 3, 3, 3, 2, 1],
+            sum = 0;
+        for (var i = 0; i < arr.length; i++) {
+            sum += arr[i];
+        }
+
+        console.log(sum); // 15
+    </script>
+
+    <!-- 3. 初始化一个数字数组，然后输出数组中所有的奇数 -->
+    <script>
+        var arr = [1, 2, 3, 4, 5, 6, 7],
+            oddArr = [];
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] % 2 === 1) {
+                oddArr.push(arr[i]);
+            }
+        }
+        console.log(oddArr); // (4) [1, 3, 5, 7]
+    </script>
+    <!-- 袁老师 -->
+    <script>
+        var arr = [234, 6, 23, 211, 23];
+        for (var index in arr) {
+            if (arr[index] % 2 !== 0) {
+                console.log(arr[index]);
+            }
+        }
+    </script>
+
+    <!-- 4. 初始化一个数字数组，然后输出数组中所有的素数 -->
+    <script>
+        var arr = [], // 存放 1-100所有整数
+            newArr = []; // newArr 存放素数
+        var record = 0;
+        // 初始化 arr
+        for (var i = 0; i < 100; i++) {
+            arr.push(i + 1);
+        }
+
+        for (var i = 0; i < arr.length; i++) {
+            record = 0;
+            for (var j = 1; j <= arr[i]; j++) {
+                if (arr[i] % j == 0) {
+                    record++;
+                }
+            }
+            if (record === 2) {
+                newArr.push(arr[i]);
+            }
+        }
+        console.log(
+            newArr
+        ); // (25) [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+    </script>
+    <!-- 袁老师 -->
+    <script>
+        var arr = [234, 2, 6, 23, 211, 23];
+        for (var index in arr) {
+            // 判断arr[index]是不是素数
+            var isFind = false;
+            for (var i = 2; i < arr[index] - 1; i++) {
+                if (arr[index] % i === 0) {
+                    isFind = true;
+                    break;
+                }
+            }
+            if (!isFind && arr[index] >= 2) {
+                console.log(arr[index]);
+            }
+        }
+    </script>
+
+    <!-- 5. 斐波拉契数列是这样一种数列：1 1 2 3 5 8 13 ......
+    数列前两位为1，第n位=第n-1位+第n-2位
+    让用户输入斐波拉契数列的长度，在控制台中打印该长度的斐波拉契数列 -->
+    <script>
+        var len = +prompt("请输入斐波拉契数列的长度: "),
+            arr = [];
+        for (var i = 0; i < len; i++) {
+            if (i === 0 || i === 1) {
+                arr.push(1);
+            } else {
+                arr.push(arr[i - 1] + arr[i - 2]);
+            }
+        }
+        console.log(arr); // (7) [1, 1, 2, 3, 5, 8, 13]
+    </script>
+    <!-- 袁老师 -->
+    <script>
+        var len = +prompt("请输入斐波拉契数列的长度");
+        if (isNaN(len) || len < 0) {
+            console.log("输入有误");
+        } else {
+            //输入正确
+            var arr = [];
+            for (var i = 0; i < len; i++) {
+                if (i === 0 || i === 1) {
+                    arr[i] = 1;
+                } else {
+                    arr[i] = arr[i - 1] + arr[i - 2];
+                }
+            }
+
+            console.log(arr);
+        }
+    </script>
+
+    <!-- 6. 定义一个用户数组，数组的每一项是一个用户对象，用户对象中包含账号和密码，随意初始化一些对象放入数组中。
+        然后提示用户输入账号和密码，判断是否登录成功 -->
+    <script>
+        var uerArr = [{
+                name: 'A',
+                age: 18,
+                count: '111',
+                pwd: '222'
+            },
+            {
+                name: 'B',
+                age: 19,
+                count: '222',
+                pwd: '333'
+            },
+            {
+                name: 'C',
+                age: 20,
+                count: '333',
+                pwd: '444'
+            },
+        ];
+        var inputCount = prompt("请输入账号: ");
+        var inputpwd = prompt("请输入密码: ");
+        for (var i = 0; i < uerArr.length; i++) {
+            if (inputCount === uerArr[i].count && inputpwd === uerArr[i].pwd) {
+                console.log("登录成功");
+                break;
+            } else if (i === uerArr.length - 1) {
+                console.log("登录失败");
+            }
+        }
+    </script>
+    <!-- 袁老师 -->
+    <script>
+        var users = [{
+                loginId: "abc",
+                loginPwd: "123"
+            },
+            {
+                loginId: "abc1",
+                loginPwd: "1234"
+            },
+            {
+                loginId: "abc2",
+                loginPwd: "1235"
+            },
+            {
+                loginId: "abc3",
+                loginPwd: "1236"
+            }
+        ];
+
+        // 不能使用 indexOf() 来查找
+        // var index = user.indexOf({ // 返回值永远都是 -1
+        //     loginId,
+        //     loginPwd
+        // })
+        // indexOf() 比较时用的是严格相等 对象之间的比较比较的是地址 它们之间的地址是不可能相等的
+        // 查找对象不能使用 indexOf() 但是基本类型可以 比如 数字 字符串 ...
+
+        var loginId = prompt("请输入账号");
+        var loginPwd = prompt("请输入密码");
+
+        // 查找问题
+        var isFind = false;
+        for (var i = 0; i < users.length; i++) {
+            var u = users[i];
+            if (u.loginId === loginId && u.loginPwd === loginPwd) {
+                isFind = true;
+                break;
+            }
+        }
+
+        if (isFind) {
+            console.log("登录成功");
+        } else {
+            console.log("登录失败");
+        }
+    </script>
+
+    <!-- 7. 初始化一个5*5的二维数组，数组每一项是一个数字，计算对角线[两条]之和 -->
+    <script>
+        // Two-dimensional array 二维数组
+        var tdArr = [
+            [1, 2, 3, 4, 5],
+            [1, 2, 3, 4, 5],
+            [1, 2, 103, 4, 5],
+            [1, 2, 3, 4, 5],
+            [1, 2, 3, 4, 5]
+        ];
+        var sum = 0;
+        for (var r = 0; r < tdArr.length; r++) {
+            for (var c = 0; c < tdArr[r].length; c++) {
+                if (r === c || r + c === tdArr.length - 1) {
+                    sum += tdArr[r][c];
+                }
+
+            }
+        }
+
+        console.log(sum); // 230
+    </script>
+    <!-- 袁老师 -->
+    <script>
+        var arr = [
+            [5, 2, 3, 1, 7],
+            [8, 0, 6, 7, 8],
+            [4, 0, 6, 2, 0],
+            [3, 0, 6, 8, 1],
+            [2, 0, 4, 5, 9]
+        ];
+
+        // 对角线之和
+        var sum = 0;
+        for (var i = 0; i < arr.length; i++) {
+            // arr[i] 是一个数组
+            for (var j = 0; j < arr[i].length; j++) {
+                // arr[i][j]
+                if (i === j || i + j === arr.length - 1) {
+                    sum += arr[i][j];
+                }
+            }
+        }
+
+        console.log(sum);
+    </script>
+
+    <!-- 8. 初始化一个数字数组（数据随意），对该数组进行升序排序，然后输出结果
+
+    思路提示：
+
+    数组的排序有多种算法可以完成，这里介绍其中一种：冒泡排序算法
+
+    冒泡排序算法的原理如下：
+    - 比较相邻的元素。如果第一个比第二个大，就交换他们两个。
+    - 对每一对相邻元素做同样的工作，从开始第一对到结尾的最后一对。在这一点，最后的元素应该会是最大的数。
+    - 针对所有的元素重复以上的步骤，除了已排好序的元素。 -->
+    <script>
+        // 升序 ==> 从头到尾 越来越大
+        var arr = [93, 27, 84, 34, 75, 63];
+        for (var i = 0; i < arr.length; i++) {
+            for (var j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    var temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+        console.log(arr); // (6) [27, 34, 63, 75, 84, 93]
+    </script>
+    <!-- 袁老师 -->
+    <script>
+        var nums = [23, 2, -34, 3563, 111, 44, 5, 8, 1];
+
+        for (var i = 1; i < nums.length; i++) {
+            // 第i次排序
+            for (var j = 0; j < nums.length - i; j++) {
+                // 比较 j 和 j+1 两个位置的数字
+                if (nums[j] > nums[j + 1]) {
+                    //交换
+                    var temp = nums[j];
+                    nums[j] = nums[j + 1];
+                    nums[j + 1] = temp;
+                }
+            }
+        }
+
+        console.log(nums);
+
+        /*
+            第1次：排了5次，比较的位置从0~4
+            2，23，44，5，8，1
+            2，23，44，5，8，1
+            2，23，5，44，8，1
+            2，23，5，8，44，1
+            2，23，5，8，1，44
+        */
+
+        /*
+            第2次：排了4次，比较的位置从0~3
+            2，23，5，8，1，44
+            2，5，23，8，1，44
+            2，5，8，23，1，44
+            2，5，8，1，23，44
+        */
+
+        /*
+            第3次：排了3次，比较的位置从0~2
+            2，5，8，1，23，44
+            2，5，8，1，23，44
+            2，5，1，8，23，44
+        */
+
+        /*
+            第4次：排了2次，比较的位置从0~1
+            2，5，1，8，23，44
+            2，1，5，8，23，44
+        */
+
+        /*
+            第5次：排了1次，比较的位置从0~0
+            1，2，5，8，23，44
+        */
+    </script>
+
+    <!-- 9. 有一个数组，存放了一些数字，找出出现频率最高的数字 [面试题考过很多次] -->
+    <script>
+        var arr = [1, 2, 3, 3, 2, 2, 4, 4, 4, 4, 2, 2, 2],
+            maxRateNum,
+            newArr = []; // 去重后的新数组
+
+        // 数组去重
+        for (var i = 0; i < arr.length; i++) {
+            var item = arr[i];
+            for (var j = 0; j < newArr.length || newArr.length === 0; j++) {
+                if (item === newArr[j]) {
+                    break;
+                } else if (j === newArr.length - 1 || newArr.length === 0) {
+                    newArr.push(item);
+                    break;
+                }
+            }
+        }
+        // console.log(newArr);
+        var count = 0,
+            maxCount = 0;
+        for (var j = 0; j < newArr.length; j++) {
+            count = 0;
+            // console.log(newArr[j]);
+            for (var i = 0; i < arr.length; i++) {
+                if (newArr[j] === arr[i]) {
+                    count++;
+                }
+            }
+            if (count > maxCount) {
+                maxRateNum = newArr[j];
+                maxCount = count;
+            }
+        }
+        console.log(maxRateNum);
+    </script>
+    <!-- 袁老师 -->
+    <script>
+        var nums = [2, 3, 4, 5, 234, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 2, 2, 3, 3, 3, 5];
+
+        // 输出：2出现频率最高，出现5次
+        // 得到记录对象
+
+        var record = {}; //记录对象
+        for (var i = 0; i < nums.length; i++) {
+            var n = nums[i];
+            if (record[n]) {
+                record[n]++;
+            } else {
+                record[n] = 1;
+            }
+        }
+
+        var result; //结果对象
+        for (var prop in record) {
+            if (!result || record[prop] > result.frequency) {
+                result = {
+                    number: prop,
+                    frequency: record[prop]
+                }
+            }
+        }
+
+        console.log(`${result.number}出现频率最高，出现${result.frequency}次`); // 5出现频率最高，出现10次
+    </script>
+
+    <!-- 补充作业: 初始化一个数组 , 求数组中的最大值 -->
+    <script>
+        var arr = [11, 75, 36, 92, 36, 54];
+        var max = arr[0];
+        for (var i = 1; i <= arr.length; i++) {
+            if (arr[i] > max) {
+                max = arr[i];
+            }
+        }
+        console.log(max); // 92
+    </script>
+    <!-- 袁老师 -->
+    <script>
+        var nums = [23, 6, 1, 1, 666, 324];
+        // 求最大值
+        var max = nums[0];
+        for (var i = 1; i < nums.length; i++) {
+            if (nums[i] > max) {
+                max = nums[i];
+            }
+        }
+
+        console.log(max); // 666
+    </script>
+</body>
+
+</html>
+```
