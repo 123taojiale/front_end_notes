@@ -7,3 +7,11 @@
 2. [姬成 HTML + CSS](https://ke.qq.com/course/231570?taid=2955805083273362)
 
 袁老师的HTML+CSS课程还没看完...
+
+**展示效果:**
+
+<div style="
+width: 0;
+height: 0;
+border: 100px solid transparent;
+border-bottom-color: red;"></div>
